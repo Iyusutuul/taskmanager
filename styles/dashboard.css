@@ -1,0 +1,203 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family:"Myriad Pro";
+    box-sizing: border-box;
+  }
+  
+
+  .rect_1{
+    width: 100%;
+    height: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+  }
+  /************sets image width on mixed color navbar****/
+  .rect_1 img{
+    width: 100%;
+  }
+  .rect_2{
+    width: 100%;
+    border: 0;
+    position:absolute;
+    /*top: 5px;*/
+    left: 50;
+    right: 0;
+    margin-top: -20px;
+  }
+  
+  /***targets both the logo and the links on the left***/
+  
+  
+  /**targets just the sidebar links***/
+  .contain{
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  box-sizing: border-box;
+  background-color: whitesmoke;
+
+  box-shadow: 1px 1px 2px rgba(185, 222, 221, 0.4);
+  }
+  .alert_success{
+  margin-top: -35px;
+  margin-left: 80px;
+  width: 50%;
+  color:  rgb(133, 193, 44);
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  }
+
+  .formheading i{
+    color: orangered;
+    font-size: 20px;
+  }
+  nav{
+    margin-top: 0px;
+    padding-top: 10px;
+  }
+  /*targets the links in the contain */
+  nav ul li{
+    display: block;
+    list-style: none;
+    margin: 0px 0px;
+    padding: 7px 35px;
+    align-items: center; 
+   }
+  /**targets the link texts itself**/
+   nav ul li a{
+    margin: auto;
+    border-collapse:collapse;
+    text-decoration: none;
+    position: relative;
+    color: brown;
+    font-size: 14px;
+    font-weight:500;
+    padding: 5px 0px;/* trick effect makes the links move forward on hover*/
+    transition: 5ms;
+   }
+   nav ul li:hover{
+    cursor: pointer;
+    padding-left: 40px;
+    background: rgba(220, 220, 220, 0.905);
+    cursor: pointer;
+   }
+   nav ul li a:hover{
+    cursor: pointer;
+    color: white;
+    width: 180px;
+   }
+   /*
+   nav ul li a:after{
+    color: orange;
+    content: '';
+    width: 100;
+    top: -10px;
+    height: 5px;
+    position: absolute;
+    left: 0;
+    bottom: -30px;
+    box-shadow: 1px 1px 2px rgb(0 0 200 / 0.4);
+    transition: 0.0s;
+   }*/
+  
+  .error{
+  font-size: 14px;
+  }
+  #status_error{
+    color: orange;
+    background-color: whitesmoke;
+    opacity: 0.5;
+  }
+  #fileInput_error{
+    color: orange;
+    background-color: white;
+  }
+  
+   .loginform{
+    width: 350px;
+    padding: 5px;
+    top: 100px;
+    position: fixed;
+    left: 30%;
+  }
+  
+   .loginform input{
+    border: 1px solid gainsboro;
+    width: 100%;
+    height: 30px;
+    margin-bottom: 5px; 
+    border-radius:3px;
+    padding: 3px 15px;
+    font-size: 12px;
+    font-weight: 500;
+    color: black;
+    text-align: left;
+    background-color: white;
+   }
+    /* targets the place holder texts ****/
+    input[type="text"]::placeholder {
+      text-align: left;
+      margin: -50px;
+      color: gainsboro;
+      font-size: 12px;
+      }
+      input[type="email"]::placeholder {
+          text-align: left;
+          font-size: 12px;
+          }
+          input[type="tel"]::placeholder {
+              text-align: left;
+              font-size: 12px;
+              color: gainsboro;
+              }
+              
+      input[type="password"]::placeholder {
+      text-align: left;   
+      font-size: 12px;
+      }
+  
+      input[type="password"]::placeholder {
+        text-align: left;   
+        font-size: 12px;
+        }
+  
+  /* positions the login button on the inline-axis ****/
+  button[type="submit"]{
+  background-color: orange;
+  width: 30%;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  box-shadow: 1px 0px 5px rgba(74, 92, 83, 0.744);
+  font-size: 14px;
+  font-weight: bolder;
+  cursor: pointer;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  }
+  
+  /***container for services***/
+  
+  /* Current/active navbar link */
+  .active {
+    background-color: yellow;
+  }
+  
+  /* Add responsiveness - will automatically display the navbar vertically instead of horizontally on screens less than 500 pixels */
+  @media screen and (min-width: 570px) {
+    .navbar a {
+      float: none;
+      display: block;
+    }
+  }
+  .sign_in{
+    color: ant;
+    cursor: pointer
+  }

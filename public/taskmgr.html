@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- <script src="https://kit.fontawesome.com/6bb208eccf.js" crossorigin="anonymous"></script> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <link rel="stylesheet" href="styles/dashboard.css" type="text/css" media="all">
+    <script src="script.js"></script>
+    </head>
+    <style>
+        /* Reset default margin and padding */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  height: 100%;
+}
+
+/* Full viewport container */
+.container {
+  display: flex; /* Flexbox layout to place sidebar and content side by side */
+  height: 100vh; /* Full height of the viewport */
+}
+
+/* Styling for the wrapper container */
+#header {
+  background-color: whitesmoke;
+  color: brown;
+}
+/* Basic styling for the page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Modal Styles */
+.modal {
+    margin: 0;
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5); /* Semi-transparent background */
+}
+#taskstable{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width  : 50%;
+    border: 2px solid orange;
+}
+/* modal background positioning*/
+.modal-content {
+    display: flex;
+    justify-content: center;
+    background-color: #fff;
+    margin: 5% 30%;
+    padding: 10px;
+    border-radius: 8px;
+    width: 400px;
+    height: 300px;
+    box-shadow: 0 40px 40px rgba(107, 212, 21, 0.2);  /* Slightly stronger shadow on hover */
+}
+
+.cancelBtn {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    /* top: 10px;
+    right: 10px; */
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: row;
+}
+
+form label {
+    margin: 5px 0;
+}
+
+form input, form textarea {
+    padding: 8px;
+    margin: 5px 20px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+   
+}
+nav ul li a{
+    font-size: 15px;
+}
+
+form button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+    /* Style the table */
+    #tasksTable {
+    margin-left: 400px;
+    width: 50%;
+    table-layout: auto; /* Allows better control over column widths */
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);  /* Horizontal and vertical offset, blur radius, and color */
+}
+</style>
+    <body>
+        <div id="header"> 
+            <div style="background-color:bisque;" class="contain">                  
+                <nav>
+                    <ul>
+                        <span style="display: flex; width: 70%; font-weight: bolder;
+                        padding: 5px; letter-spacing: 2px;justify-content: center; 
+                        margin: 20px auto;background-color: orange;border-radius: 30px;
+                        border: 2px solid greenyellow;">TaskMaster</span>
+                        <li id="openModalBtn"><a style="font-weight: bolder;"  href=" "><i style="background-color: aqua;padding: 3px;
+                        border-radius: 50px;" class="fa-solid fa-plus"></i>&#160&#160&#160Add Tasks</a></li>
+                        <li><a href="#"><i class="fa-solid fa-magnifying-glass"></i>&#160&#160&#160&#160Search</a></li>
+                        <li style="background-color: gainsboro;"><a href="#"><i class="fa-solid fa-inbox"></i>&#160&#160&#160&#160Inbox</a></li>
+                        <li><a href="#"><i class="fa-solid fa-clock"></i>&#160&#160&#160&#160View Pending</a></li>
+                        <li><a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>&#160&#160&#160Logout</a></li>                    
+                    </ul>  
+                </nav>
+            </div> 
+        </div>
+        <h2 style="display: flex; justify-self: center;" >Pending Tasks</h2>
+        <table style="margin-top: 0px; flex-grow: 1; padding: 10px;" id="tasksTable" class="ui celled table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Deadline</th>
+                    <th>Priority</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Tasks will be dynamically loaded here -->
+            </tbody>
+        </table>        
+        </div>
+        <div id="modal" class="modal">
+          <div class="modal-content">
+              <span class="close-btn" id="closeModalBtn">&times;</span>
+        <form action="/success" id="taskForm" method="POST">
+            <div class="loginform">              
+          <div class="inputs">
+        <div>
+            <h3 style="justify-self: center;">Add Task</h3>
+      <label for="title">
+    <input style="margin-top: 0px;" type="text"
+  id="merchant_name" name="title" required="" maxlength="50" placeholder="Title" >
+</label>
+</div>
+<div>
+<label for="description">
+<input style="margin-top: 0px;" type="text" id="description" 
+  name="description" required="" maxlength="100" placeholder="Description" >
+    </label>
+      </div>
+        <div>
+            <label for="deadline">
+                <input type="date" id="dueDate" name="deadline" required>
+          </label>
+        </div>  
+        <div class="ui container">
+            <label for="priority"></label>
+            <div style="margin: 0px 6%;" class="ui selection dropdown" id="priority-dropdown">
+                <input type="hidden" name="priority">
+                <i class="dropdown icon"></i>
+                <div class="default text">Select Priority</div>
+                <div class="menu">
+                    <div class="item" data-value="1">
+                        <i class="red circle icon"></i> High Priority
+                    </div>
+                    <div class="item" data-value="2">
+                        <i class="orange circle icon"></i> Medium Priority
+                    </div>
+                    <div class="item" data-value="3">
+                        <i class="green circle icon"></i> Low Priority
+                    </div>
+                </div>
+            </div>
+                    <!-- <button style="background-color: gainsboro;" class="submitBtn" type="submit">Cancel</button> -->
+                    <button class="cancelBtn" type="submit">Add Task</button>
+                </div>                    
+            </div>
+        </form>
+    </div>
+</div>
+    <script>
+               window.onload = function() {
+    loadTasks();  // Fetch tasks from backend when the page loads
+};
+             // Open Modal
+        $('#openModalBtn').click(function (e) {
+            e.preventDefault();
+            $('#modal').fadeIn();
+            $('#taskForm')[0].reset();  // Reset the form when opening the modal
+        });
+
+        // Close Modal when clicking the 'X' button
+        $('#closeModalBtn').click(function () {
+            $('#modal').fadeOut();
+            $('#taskForm')[0].reset();  // Reset the form when closing the modal
+        });
+
+        // Close Modal if clicking outside the modal
+        $(window).click(function (event) {
+            if ($(event.target).is('#modal')) {
+                $('#modal').fadeOut();
+            }
+        });
+
+        // Initialize the dropdown
+        $('#priority-dropdown').dropdown();
+        </script>
+    </body>
+</html>

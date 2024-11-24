@@ -1,0 +1,51 @@
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="styles/logins.css">
+        <title>Task Manager</title>
+    </head>
+<body>
+    <div id="header">
+        <div style="background-color: #0093E9; height: 400px;
+        background-image: linear-gradient(160deg, #133950 0%, #309084 100%);" class="rect_2"></div>
+            </div>
+    <div class="contain">                  
+        <nav>
+            <ul>
+                <li><a style="display: block;" href="/signup">Signup</a></li>
+            </ul>  
+        </nav>
+    </div>       
+<form action="/" method="POST">     
+    <div class="loginform">              
+        <div class="container">
+            <div class="alert_error">RECHECK CREDENTIALS</div>
+            <div class="inputs">
+                <label for="email">
+                    <input style="margin-top: 20px;" type="email" id="username" required="" maxlength="64" name="email"
+                    placeholder="Username" onfocus="if(this.value == 'username'){this.value = '';}" 
+                    onblur="if(this.value == ''){this.value = 'username';}">
+                    </label></div>
+                <div>
+            <label for="password"><b></b>
+                <input type="password" id="pass" minlength="4" required="" 
+                placeholder="Password" maxlength="20" name="password"
+                onfocus="this.value = this.value=='Password'?'':this.value;" 
+                onblur="this.value = this.value==''?'Password':this.value;">
+                </label></div>
+            </div>
+        <div class="login_button">
+            <input style="margin-top: 30px;
+            padding: 10px 0px;
+                background-color: orangered;
+                color: white;
+                font-weight: 300;" type="submit" value="Login">
+            </div>
+        </div>
+        </div>
+        </div>
+        </form>
+    </body>
+</html>
