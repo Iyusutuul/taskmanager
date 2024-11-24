@@ -1,43 +1,3 @@
-
-window.onload = function() {
-    loadTasks();  // Fetch tasks from backend when the page loads
-  };
-       
-// Get modal, buttons, and form elements
-const modal = document.getElementById('modal');
-const openModalBtn = document.getElementById('openModalBtn');
-const closeModalBtn = document.getElementById('closeModalBtn');
-const contactForm = document.getElementById('taskForm');
-
-// Open modal
-openModalBtn.onclick = function() {
-    modal.style.display = "block";
-}
-
-// Close modal when clicking 'X' button
-closeModalBtn.onclick = function() {
-    modal.style.display = "none";
-}
-
-// Close modal when clicking outside the modal content
-window.onclick = function(event) {
-    if (event.target === modal) {
-        modal.style.display = "none";
-    }
-}
-
-// Handle form submission (you can add more functionality here, like validation)
-contactForm.onsubmit = function(event) {
-    event.preventDefault(); // Prevent form submission to server for now
-
-    console.log("Form Submitted", { title, description, deadline,priority});
-
-    // Optionally, you can close the modal after submission
-    modal.style.display = "none";
-}
-
- 
-
   // Function to load tasks
   function loadTasks() {
     fetch('/tasks')  // Make an API request to the /tasks endpoint
@@ -58,6 +18,7 @@ contactForm.onsubmit = function(event) {
         // Create table rows for each task
         const tableRows = tasks.map(task => `
           <tr>
+          <tr id="task-${task.id}">
             <td>${task.title}</td>
             <td>${task.description}</td>
             <td>${task.deadline}</td>
@@ -105,18 +66,23 @@ document.addEventListener('DOMContentLoaded', function() {
 // Function to delete a task
 function deleteTask(taskId) {
   fetch(`/tasks/${taskId}`, {
-      method: 'DELETE',  // Specify the HTTP DELETE method
+    method: 'DELETE',  // Specify the HTTP DELETE method
   })
   .then(response => response.json())
   .then(data => {
-      if (data.success) {
-          // If the delete is successful, remove the task from the UI
-          document.getElementById(`task-${taskId}`).remove();
-      } else {
-          alert('Failed to delete task');
+    if (data.success) {
+      // If the delete is successful, remove the task from the UI
+      const taskRow = document.getElementById(`task-${taskId}`);
+      if (taskRow) {
+        taskRow.remove();
       }
+    } else {
+      alert('Failed to delete task');
+    }
   })
   .catch(error => console.error('Error:', error));
 }
 
+const urlParams = new URLSearchParams(window.location.search);
+const errorType = urlParams.get('error');
 

@@ -100,9 +100,12 @@ header *{
   margin-left: 370px;
   
 }
-.alert_error{
+#alert_error{
   display: none;
+ color: #fff;
   background-color: red;
+  padding: 5px;
+  border-radius: 2px;
 
 }
 /*targets the descriptive links container behaviour*/

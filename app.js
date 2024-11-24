@@ -41,81 +41,57 @@ app.use(express.urlencoded({ extended: true })); // For parsing application/x-ww
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/styles', express.static(path.join(__dirname, 'styles')));
 
-// Route to fetch tasks from the database and render the page
-// app.get("/", async (req, res) => {
-//     try {
-//         const result = await client.query('SELECT * FROM tasks');
-//         const tasks = result.rows;
-//         // Serve HTML file with the data
-//         res.sendFile(path.resolve(__dirname, 'public', 'taskmgr.html'));  // Serve the HTML page
-//     } catch (err) {
-//         console.error('Database error:', err);
-//         res.status(500).send('Error retrieving tasks.');
-//     }
-// });
-
 app.get("/", (req,res) =>{
     res.sendFile(path.resolve(__dirname, 'public', 'login.html'));  // Serve the HTML page
     });
-    
-    
-    app.post("/", (req, res) => {
-        const { email, password } = req.body;
-    
-        if (email && password) {
-            // Query the database to get the user with the provided email
-            pool.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
-                if (err) {
-                    console.error('Database error:', err);
-                    return res.status(500).send('Internal Server Error');
-                }
-    
-                if (result.rows.length > 0) {
-                    const user = result.rows[0];
-    
-                    // Compare the entered password with the stored bcrypt hash
-                    bcrypt.compare(password, user.password, (err, match) => {
-                        if (err) {
-                            console.error('Error comparing password:', err);
-                            return res.status(500).send('Internal Server Error');
-                        }
-    
-                        if (match) {
-                            // Passwords match, proceed with login
-                            req.session.loggedin = true;
-                            req.session.userId = user.id;
-                            req.session.user = user;
-                            req.session.email = email;
-                            console.log('User logged in:', req.session.user);
-    
-                            // Redirect to task manager page after login
-                            res.redirect('/taskmgr.html');
-                        } else {
-                            res.status(403).send('Incorrect email or password');
-                        }
-                    });
-                } else {
-                    res.status(404).send('User not found');
-                }
-            });
-        } else {
-            res.status(400).send('Email and password are required');
-        }
-    });
-    
-//     app.get('/tasks', async (req, res) => {
-//     if (!req.session.loggedin) {
-//         return res.status(401).json({ error: 'Unauthorized' });
-//     }
 
-//     try {
-//         const result = await client.query('SELECT * FROM tasks ORDER BY deadline ASC');
-//         res.json(result.rows);  // Send tasks as JSON response
-//     } catch (error) {
-//         console.error('Error fetching tasks:', error);
-//         res.status(500).json({ error: 'Failed to fetch tasks' });
-//     }
-// });
+app.post("/", (req, res) => {
+    const { email, password } = req.body;
+
+    if (email && password) {
+        // Query the database to get the user with the provided email
+        pool.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).send('Internal Server Error');
+            }
+
+            if (result.rows.length > 0) {
+                const user = result.rows[0];
+
+                // Compare the entered password with the stored bcrypt hash
+                bcrypt.compare(password, user.password, (err, match) => {
+                    if (err) {
+                        console.error('Error comparing password:', err);
+                        return res.status(500).send('Internal Server Error');
+                    }
+
+                    if (match) {
+                        // Passwords match, proceed with login
+                        req.session.loggedin = true;
+                        req.session.userId = user.id;
+                        req.session.user = user;
+                        req.session.email = email;
+                        console.log('User logged in:', req.session.user);
+
+                        // Redirect to task manager page after login
+                        res.redirect('/taskmgr.html');
+                    } else {
+                        // If passwords don't match, redirect with error query parameter
+                        res.redirect('/login.html?error=incorrect');
+                    }
+                });
+            } else {
+                // If user is not found, redirect with error query parameter
+                res.redirect('/login.html?error=usernotfound');
+            }
+        });
+    } else {
+        // If email or password is missing, redirect with error query parameter
+        res.redirect('/login.html?error=missingcredentials');
+    }
+});
+
 app.get('/tasks', (req, res) => {
     const query = 'SELECT * FROM tasks';
   
@@ -149,8 +125,8 @@ app.post('/signup', (req, res) => {
 
         if (result.rows.length > 0) {
             message = 'Email is already in use';
-            return res.render('signup', { message });  // Render signup page with error message
-        }
+            return res.sendFile(path.resolve(__dirname,'public','signup.html'));  // Render signup page with error message
+        };
 
         // Hash password before storing it
         try {
@@ -175,10 +151,8 @@ app.post('/signup', (req, res) => {
     });
 });
 
-
 app.delete('/tasks/:id', async (req, res) => {
     const taskId = req.params.id;  // Get task ID from the URL params
-
     try {
         // Query to delete the task by id
         const result = await pool.query('DELETE FROM tasks WHERE id = $1 RETURNING *', [taskId]);
@@ -186,7 +160,6 @@ app.delete('/tasks/:id', async (req, res) => {
         if (result.rowCount === 0) {
             return res.status(404).json({ success: false, message: 'Task not found' });
         }
-
         // Return success response
         res.json({ success: true });
     } catch (err) {
@@ -199,6 +172,7 @@ app.delete('/tasks/:id', async (req, res) => {
 // Route to handle adding tasks (POST)
 app.post("/success", async (req, res) => {
     const { title, description, deadline, priority } = req.body;
+    const userId = req.session.userId;
 
     // Validate input
     if (!title || !description || !deadline || !priority) {
@@ -218,10 +192,11 @@ app.post("/success", async (req, res) => {
 
     // PostgreSQL query to insert data into the tasks table
     const query = `
-        INSERT INTO tasks (title, description, deadline, priority)
-        VALUES ($1, $2, $3, $4);
+        INSERT INTO tasks (title, description, deadline, priority,user_id)
+        VALUES ($1, $2, $3, $4, $5);
+       
     `;
-    const values = [title, description, deadlineDate, priority];
+    const values = [title, description, deadlineDate, priority,userId];
 
     try {
         const result = await pool.query(query, values);

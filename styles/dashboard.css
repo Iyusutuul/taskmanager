@@ -65,8 +65,9 @@
   nav ul li{
     display: block;
     list-style: none;
-    margin: 0px 0px;
-    padding: 7px 35px;
+    margin: 0px 10px;
+    border-radius: 10px;
+    padding: 5px 10px;
     align-items: center; 
    }
   /**targets the link texts itself**/
@@ -75,36 +76,22 @@
     border-collapse:collapse;
     text-decoration: none;
     position: relative;
-    color: brown;
+    color: black;
     font-size: 14px;
-    font-weight:500;
+  
     padding: 5px 0px;/* trick effect makes the links move forward on hover*/
     transition: 5ms;
    }
    nav ul li:hover{
     cursor: pointer;
-    padding-left: 40px;
-    background: rgba(220, 220, 220, 0.905);
+    background: rgba(197, 181, 181, 0.905);
     cursor: pointer;
    }
    nav ul li a:hover{
     cursor: pointer;
-    color: white;
+    color: black;
     width: 180px;
    }
-   /*
-   nav ul li a:after{
-    color: orange;
-    content: '';
-    width: 100;
-    top: -10px;
-    height: 5px;
-    position: absolute;
-    left: 0;
-    bottom: -30px;
-    box-shadow: 1px 1px 2px rgb(0 0 200 / 0.4);
-    transition: 0.0s;
-   }*/
   
   .error{
   font-size: 14px;
