@@ -20,16 +20,27 @@
           transform: scale(1.1);
           background-color: rgb(235, 72, 13);
         }
+        #alert_error{
+            display: none; /* Initially hidden */
+            color: white;
+            font-size: 16px;
+            padding: 10px;
+            border: 2px solid red;
+            border-radius: 5px;
+            float: inline-end !important;
+        }
         </style>
 <body>
     <div id="header">
-    <div class="contain">                  
+    <div >                  
         <nav>
             <ul>
-                <!-- <li><a style="position:absolute; margin: -40px 0px 0px 50px" href="/login">Log In</a></li> -->
+                <li><a href="/" style="border: 2px solid lawngreen; display: flex;border-radius: 5px;
+                 justify-content: flex-end; margin: 10px auto" href="/login">Back to Log In Page</a></li>
             </ul>  
         </nav>
     </div> 
+   
 <form action="/signup" method="POST">  
     <div class="loginform">              
         <div class="container">
@@ -66,5 +77,28 @@
                 </div>
             </div>
         </form>
+         <!-- Error message container -->
+    <div id="alert_error"></div>
+        <script>
+            let isEdit = false; // Flag to track if it's an edit or add operation
+
+            
+            // Get the URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorType = urlParams.get('error');
+            
+            // Check if there's an error query parameter
+            if (errorType) {
+                const alertError = document.getElementById('alert_error');
+                alertError.style.display = 'block'; // Show the error message
+    
+                // Set the appropriate error message based on the error type
+                if (errorType === 'match') {
+                    alertError.innerText = 'User exist with this email.';
+                } else {
+                    alertError.innerText = 'An unknown error occurred. Please try again.';
+                }
+            }
+        </script>
     </body>
 </html>

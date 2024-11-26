@@ -1,42 +1,49 @@
   // Function to load tasks
   function loadTasks() {
-    fetch('/tasks')  // Make an API request to the /tasks endpoint
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch tasks');
-        }
-        return response.json();  // Parse the JSON response
-      })
-      .then(tasks => {
-        const tableBody = document.querySelector('#tasksTable tbody');  // Get the table body
+    const searchQuery = document.getElementById('searchQuery').value;
+    const url = searchQuery ? `/tasks?query=${encodeURIComponent(searchQuery)}` : '/tasks';
+    
+    fetch(url)  // Fetch tasks from the backend
+        .then(response => response.json())
+        .then(tasks => {
+            const taskTableBody = document.querySelector('#tasksTable tbody');
+            taskTableBody.innerHTML = ''; // Clear any existing rows
+            
+            tasks.forEach(task => {
+                const row = document.createElement('tr');
+                
+                // Create task data cells
+                row.innerHTML = `
+                    <td>${task.title}</td>
+                    <td>${task.description}</td>
+                    <td>${new Date(task.deadline).toLocaleDateString()}</td>
+                    <td>${task.priority}</td>
+                    <td>
+                        <button class="editBtn" onclick="editTask(${task.id})">Edit</button>
+                        <button onclick="deleteTask(${task.id})">Delete</button>
+                    </td>
+                `;
+                
+                taskTableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching tasks:', error));
+}
+
+        // // Create table rows for each task
+        // const tableRows = tasks.map(task => `
+        //   <tr>
+        //   <tr id="task-${task.id}">
+        //     <td>${task.title}</td>
+        //     <td>${task.description}</td>
+        //     <td>${task.deadline}</td>
+        //     <td>${getPriorityText(task.priority)}</td>
+        //     <td>
+        //       <button id="delete-btn"  class="ui red button" onclick="deleteTask(${task.id})">Delete</button>
+        //     </td>
+        //   </tr>
+        // `).join('');
         
-        if (tasks.length === 0) {
-          tableBody.innerHTML = "<tr><td colspan='5'>No tasks found.</td></tr>";
-          return;
-        }
-
-        // Create table rows for each task
-        const tableRows = tasks.map(task => `
-          <tr>
-          <tr id="task-${task.id}">
-            <td>${task.title}</td>
-            <td>${task.description}</td>
-            <td>${task.deadline}</td>
-            <td>${getPriorityText(task.priority)}</td>
-            <td>
-              <button id="delete-btn"  class="ui red button" onclick="deleteTask(${task.id})">Delete</button>
-            </td>
-          </tr>
-        `).join('');
-
-        // Insert rows into the table body
-        tableBody.innerHTML = tableRows;
-      })
-      .catch(error => {
-        console.error('Error loading tasks:', error);
-        alert('Failed to load tasks');
-      });
-  }
 
   // Function to get priority text
   function getPriorityText(priority) {
@@ -63,26 +70,74 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-// Function to delete a task
 function deleteTask(taskId) {
-  fetch(`/tasks/${taskId}`, {
-    method: 'DELETE',  // Specify the HTTP DELETE method
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      // If the delete is successful, remove the task from the UI
-      const taskRow = document.getElementById(`task-${taskId}`);
-      if (taskRow) {
-        taskRow.remove();
-      }
-    } else {
-      alert('Failed to delete task');
-    }
-  })
-  .catch(error => console.error('Error:', error));
+  if (confirm('Are you sure you want to delete this task?')) {
+      fetch(`/tasks/${taskId}`, { method: 'DELETE' })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  alert('Task deleted');
+                  loadTasks();  // Reload tasks after deletion
+              } else {
+                  alert('Error deleting task');
+              }
+          })
+          .catch(error => console.error('Error deleting task:', error));
+  }
 }
 
+// Listen for new task event
+socket.on('new-task', (task) => {
+  const taskTableBody = document.querySelector('#tasksTable tbody');
+  const row = document.createElement('tr');
+  
+  row.innerHTML = `
+      <td>${task.title}</td>
+      <td>${task.description}</td>
+      <td>${new Date(task.deadline).toLocaleDateString()}</td>
+      <td>${task.priority}</td>
+      <td>
+           <button class="editBtn" onclick="editTask(${task.id})">Edit</button>
+          <button onclick="deleteTask(${task.id})">Delete</button>
+      </td>
+  `;
+  
+  taskTableBody.appendChild(row);
+});
 const urlParams = new URLSearchParams(window.location.search);
 const errorType = urlParams.get('error');
 
+// Open the modal for editing a task
+function editTask(taskId) {
+  // Fetch task data from the backend
+  fetch(`/tasks/${taskId}`)
+      .then(response => response.json())
+      .then(task => {
+          // Populate the form with task data
+          document.getElementById('title').value = task.title;
+          document.getElementById('description').value = task.description;
+          document.getElementById('deadline').value = task.deadline.split('T')[0]; // Adjust if deadline is in ISO format
+          document.getElementById('priority').value = task.priority;
+          document.getElementById('taskId').value = task.id;
+
+          // Change the form action and method for update
+          document.getElementById('taskForm').action = `/update-tasks/${task.id}`;
+          document.getElementById('taskForm').method = 'PUT'; // Use PUT for updates
+
+          // Show the modal
+          document.getElementById('modal').style.display = 'flex'; // Use 'flex' to display it
+      })
+      .catch(error => console.error('Error fetching task:', error));
+}
+
+// Close the modal when clicking the 'X' button
+document.getElementById('closeModalBtn').onclick = function() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+// Close modal if clicking outside the modal
+window.onclick = function(event) {
+  if (event.target === document.getElementById('modal')) {
+      document.getElementById('modal').style.display = 'none';
+  }
+}

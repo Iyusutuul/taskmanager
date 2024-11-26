@@ -155,7 +155,7 @@
         }
   
   /* positions the login button on the inline-axis ****/
-  button[type="submit"]{
+  /* button[type="submit"]{
   background-color: orange;
   width: 30%;
   text-align: center;
@@ -168,7 +168,7 @@
   cursor: pointer;
   border-radius: 5px;
   letter-spacing: 1px;
-  }
+  } */
   
   /***container for services***/
   
@@ -188,3 +188,225 @@
     color: ant;
     cursor: pointer
   }
+    /* Reset default margin and padding */
+    body,
+    html {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        height: 100%;
+    }
+
+    /* Full viewport container */
+    .container {
+        display: flex;
+        /* Flexbox layout to place sidebar and content side by side */
+        height: 100vh;
+        /* Full height of the viewport */
+    }
+
+    /* Styling for the wrapper container */
+    #header {
+        background-color: whitesmoke;
+        color: brown;
+    }
+
+    /* Basic styling for the page */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    button {
+        padding: 6px 12px;
+        width: auto;
+        margin: 5px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    /* Modal Styles */
+    .modal {
+        margin: 0;
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        z-index: 1;
+        /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Semi-transparent background */
+    }
+
+    #taskstable {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        width: 100%;
+        border: 2px solid orange;
+    }
+
+    /* modal background positioning*/
+    .modal-content {
+        display: flex;
+        justify-content: center;
+        background-color: #fff;
+        margin: 5% 30%;
+        padding: 10px;
+        border-radius: 8px;
+        width: 400px;
+        height: 300px;
+        box-shadow: 0 40px 40px rgba(107, 212, 21, 0.2);
+        /* Slightly stronger shadow on hover */
+    }
+
+
+
+    .close-btn:hover,
+    .close-btn:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* Form Styling */
+    form {
+        display: flex;
+        flex-direction: row;
+    }
+
+    form label {
+        margin: 5px 0;
+    }
+
+    form input,
+    form textarea {
+        padding: 8px;
+        margin: 5px 20px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+
+    }
+
+    nav ul li a {
+        font-size: 15px;
+    }
+
+    form button {
+    display: flex;               /* Use flexbox to center content */
+    justify-content: center;     /* Horizontally center the text */
+    align-items: center;         /* Vertically center the text */
+    text-align: center;   
+    margin-left: 260px;
+    margin-top: -30px;
+   
+    padding: 5px 7px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    }
+
+    form button:hover {
+        background-color: #45a049;
+    }
+
+    /* Style the table */
+    #tasksTable {
+        margin-left: 420px;
+        width: 50%;
+        table-layout: auto;
+        /* Allows better control over column widths */
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+        /* Horizontal and vertical offset, blur radius, and color */
+    }
+
+    #searchQuery {
+            width: 100%;
+            height: 40px;
+            padding: 5px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width:80%;
+          
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Task results container */
+        .task-results-container {
+            margin-top: 20px;
+        max-height: 400px; /* Increase height */
+        overflow-y: auto;
+        }
+
+        /* Individual task result styling */
+        .taskResults {
+            background-color: red;
+        border: 1px solid #ddd;
+        padding: 20px; /* Increase padding */
+        margin-bottom: 15px;
+        border-radius: 8px;
+        width: 100%; /* Ensure it takes full width */
+        box-sizing: border-box; /* Ensure padding does not affect width */
+        }
+
+        .task-result:hover {
+            background-color: #f1f1f1;
+        }
+
+        .task-title {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .task-description {
+            font-size: 14px;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        .task-deadline,
+        .task-priority {
+            font-size: 12px;
+            color: #777;
+        }
+        .modal-content {
+       
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .searchmodal-content {
+       margin: 100px 0; 
+       display: flex;
+       flex-direction: column;
+       justify-self: center;
+       align-items: center;
+       width: 500px;
+   }
+   .button-container{
+    display: flex;
+    justify-content: space-between;
+   }
+   .deleteBtn{
+    background-color: rgba(255, 0, 0, 0.695);
+   }
+   .deleteBtn:hover{
+    background-color: red;
+   }

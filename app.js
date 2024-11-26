@@ -1,21 +1,33 @@
 const express = require('express');
+require('dotenv').config();
 const { Pool } = require('pg');
 const path = require('path');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+const http = require('http');
+const socketIo = require('socket.io');
 
 const app = express();
 const port = 3000;
+
+const server = http.createServer(app);
+const io = socketIo(server);  // Initialize socket.io
 
 app.use(session({
     secret: 'secret',
     secure: true,
     resave: false,
     saveUninitialized: false,
-    cookie: {maxAge: 1000000}
+    cookie: {maxAge: 3600000}
 }));
 
+io.on('connection', (socket) => {
+    console.log('A user connected');
+    socket.on('disconnect', () => {
+        console.log('A user disconnected');
+    });
+});
 
 const pool = new Pool({
     user: 'postgres',
@@ -93,18 +105,29 @@ app.post("/", (req, res) => {
 });
 
 app.get('/tasks', (req, res) => {
-    const query = 'SELECT * FROM tasks';
-  
-    pool.query(query, (error, result) => {
-      if (error) {
-        console.error('Error occurred:', error);
-        res.status(500).send('An error occurred while retrieving data from the database.');
-      } else {
-        const task = result.rows;
-        res.json(task);
-      }
+    // Check if there's a search query in the URL parameters
+    const searchQuery = req.query.query;
+
+    let sqlQuery = 'SELECT * FROM tasks WHERE user_id = $1';
+    let queryParams = [req.session.userId]; // Always filter by user_id
+
+    if (searchQuery && searchQuery.length > 0) {
+        // If there's a search query, add the filtering condition for the title and description
+        sqlQuery += ' AND (title ILIKE $2 OR description ILIKE $2)';
+        queryParams.push(`%${searchQuery}%`); // Use ILIKE for case-insensitive search
+    }
+
+    // Run the query
+    pool.query(sqlQuery, queryParams, (error, result) => {
+        if (error) {
+            console.error('Error occurred:', error);
+            return res.status(500).send('An error occurred while retrieving data from the database.');
+        }
+
+        const tasks = result.rows;
+        res.json(tasks);  // Return the tasks (filtered by search query, if applicable)
     });
-  });
+});
     
 app.get("/signup",(req,res)=>{
 res.sendFile(path.resolve(__dirname, 'public', 'signup.html'));  // Serve the signup page
@@ -125,7 +148,7 @@ app.post('/signup', (req, res) => {
 
         if (result.rows.length > 0) {
             message = 'Email is already in use';
-            return res.sendFile(path.resolve(__dirname,'public','signup.html'));  // Render signup page with error message
+            return res.redirect('/signup.html?error=match');  // Render signup page with error message
         };
 
         // Hash password before storing it
@@ -151,70 +174,157 @@ app.post('/signup', (req, res) => {
     });
 });
 
-app.delete('/tasks/:id', async (req, res) => {
-    const taskId = req.params.id;  // Get task ID from the URL params
-    try {
-        // Query to delete the task by id
-        const result = await pool.query('DELETE FROM tasks WHERE id = $1 RETURNING *', [taskId]);
 
+
+// DELETE a task by ID
+app.delete('/tasks/:id', (req, res) => {
+    const taskId = parseInt(req.params.id);
+    const query = 'DELETE FROM tasks WHERE id = $1 RETURNING *';
+   pool.query(query, [taskId])
+        .then(result => {
+            if (result.rows.length > 0) {
+                res.status(200).json({ success: true });
+            } else {
+                res.status(404).json({ success: false, message: 'Task not found' });
+            }
+        })
+        .catch(err => {
+            console.error('Error deleting task', err);
+            res.status(500).json({ error: 'Internal Server Error' });
+        });
+});
+// Fetch task details by ID (for editing)
+app.get('/tasks/:id', async (req, res) => {
+    const taskId = req.params.id; // Get task ID from the URL
+    console.log(taskId);
+
+    // Query to fetch the task from the database
+    const query = 'SELECT * FROM tasks WHERE id = $1';
+    
+    try {
+        const result = await pool.query(query, [taskId]);
         if (result.rowCount === 0) {
-            return res.status(404).json({ success: false, message: 'Task not found' });
+            return res.status(404).json({ error: 'Task not found' });
         }
-        // Return success response
-        res.json({ success: true });
-    } catch (err) {
-        console.error('Error deleting task:', err);
-        res.status(500).json({ success: false, message: 'Server error' });
+        res.json(result.rows[0]); // Return the task as JSON
+    } catch (error) {
+        console.error('Error fetching task:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
 
-// Route to handle adding tasks (POST)
+// PUT endpoint to update a task
+app.put('/tasks/:id', async (req, res) => {
+    const taskId = req.params.id; // Get task ID from the URL parameter
+    const { title, description, deadline, priority } = req.body; // Get updated task data from the request body
+
+    // SQL query to update task details in the database
+    const query = `
+        UPDATE tasks
+        SET title = $1, description = $2, deadline = $3, priority = $4
+        WHERE id = $5
+        RETURNING *`; // Returning the updated task
+
+    try {
+        // Execute the query with the provided values
+        const result = await client.query(query, [title, description, deadline, priority, taskId]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Task not found' }); // Handle task not found
+        }
+
+        const updatedTask = result.rows[0]; // Get the updated task
+
+        // Send the updated task data back as a JSON response
+        res.json(updatedTask);
+    } catch (error) {
+        console.error('Error updating task:', error);
+        res.status(500).json({ error: 'Internal server error' }); // Handle server errors
+    }
+});
+
+
+
+// Handle adding a task
 app.post("/success", async (req, res) => {
     const { title, description, deadline, priority } = req.body;
     const userId = req.session.userId;
 
-    // Validate input
+    if (!userId) {
+        return res.status(401).json({ error: 'User is not authenticated. Please log in.' });
+    }
+
     if (!title || !description || !deadline || !priority) {
         return res.status(400).json({ error: 'All fields (title, description, deadline, and priority) are required.' });
     }
 
-    // Ensure priority is a valid integer between 1 and 3
     if (![1, 2, 3].includes(Number(priority))) {
         return res.status(400).json({ error: 'Priority must be a number: 1 (High), 2 (Medium), or 3 (Low).' });
     }
 
-    // Validate the deadline is a valid date
     const deadlineDate = new Date(deadline);
     if (isNaN(deadlineDate.getTime())) {
         return res.status(400).json({ error: 'Invalid deadline date.' });
     }
 
-    // PostgreSQL query to insert data into the tasks table
-    const query = `
-        INSERT INTO tasks (title, description, deadline, priority,user_id)
-        VALUES ($1, $2, $3, $4, $5);
-       
-    `;
-    const values = [title, description, deadlineDate, priority,userId];
+    const query = `INSERT INTO tasks (title, description, deadline, priority, user_id) VALUES ($1, $2, $3, $4, $5)`;
+    const values = [title, description, deadlineDate, priority, userId];
 
     try {
         const result = await pool.query(query, values);
-        
+
         // If the insert was successful
         if (result.rowCount > 0) {
+            // Emit the new task to all connected clients
+            io.emit('new-task', { title, description, deadline: deadlineDate, priority });
+
             res.status(201).json({
                 message: 'Task added successfully!',
                 task: { title, description, deadline: deadlineDate, priority }
             });
         } else {
-            // Handle case where no row was inserted (probably due to a conflict)
-            res.status(400).json({ error: 'Failed to add task. Duplicate task or other conflict occurred.' });
+            res.status(400).json({ error: 'Failed to add task.' });
         }
     } catch (error) {
         console.error('Database error:', error);
         res.status(500).json({ error: 'Error saving record. Please try again later.' });
     }
+});
+
+
+app.get('/search-tasks', async (req, res) => {
+    const { query } = req.query; // Get search query from URL parameters
+
+    if (!query) {
+        return res.status(400).send('Search query is required');
+    }
+
+    try {
+        // Query PostgreSQL to search tasks by title or description
+        const result = await pool.query(
+            `SELECT * FROM tasks WHERE title ILIKE $1 OR description ILIKE $1`,
+            [`%${query}%`]
+        );
+
+        // Send the results as JSON
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error querying the database', err);
+        res.status(500).send('Server Error');
+    }
+});
+
+app.get('/logout', (req, res) => {
+    // Clear the session or any user-related data
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+        } else {
+            // Redirect the user to a login page or any other appropriate page
+            res.redirect('/');
+        }
+    });
 });
 
 // Start the server
