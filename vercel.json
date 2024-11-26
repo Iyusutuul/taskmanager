@@ -7,7 +7,7 @@
       }
     ],
     "env": {
-      "DATABASE_URL": "your-postgresql-connection-string"
+      "DATABASE_URL": "postgres://postgres:Huaweiy9@@localhost:5432/my_database"
     }
   }
   
