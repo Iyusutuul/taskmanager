@@ -1,5 +1,6 @@
-const express = require('express');
 require('dotenv').config();
+
+const express = require('express');
 const { Pool } = require('pg');
 const path = require('path');
 const session = require('express-session');
@@ -13,6 +14,16 @@ const port = 3000;
 
 const server = http.createServer(app);
 const io = socketIo(server);  // Initialize socket.io
+
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL
+});
+
+client.connect();
+
+
+  pool.connect();
 
 app.use(session({
     secret: 'secret',
@@ -29,22 +40,9 @@ io.on('connection', (socket) => {
     });
 });
 
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'taskmanager',
-    password: 'Huaweiy9@',
-    port: 5432,
-});
 
-// Connect to the PostgreSQL database
-pool.connect((err) => {
-    if (err) {
-        console.error('Database connection error:', err.stack);
-    } else {
-        console.log('Connected to the database');
-    }
-});
+
+
 
 // Middleware to parse JSON bodies and static files
 app.use(express.json());
