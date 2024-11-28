@@ -44,13 +44,11 @@ app.post("/", (req, res) => {
     const { email, password } = req.body;
 
     if (email && password) {
-        // Query the database to get the user with the provided email
         pool.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
             if (err) {
                 console.error('Database error:', err);
-                return res.status(500).send('Internal Server Error');
+              return  res.sendFile(path.resolve(__dirname, 'public', 'error.html'));  // Serve the error page
             }
-
             if (result.rows.length > 0) {
                 const user = result.rows[0];
 
