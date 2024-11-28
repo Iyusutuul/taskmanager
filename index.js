@@ -40,50 +40,50 @@ app.get("/", (req,res) =>{
     res.sendFile(path.resolve(__dirname, 'public', 'login.html'));  // Serve the HTML page
     });
 
-app.post("/", (req, res) => {
-    const { email, password } = req.body;
-
-    if (email && password) {
-        pool.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
-            if (err) {
-                console.error('Database error:', err);
-              return  res.sendFile(path.resolve(__dirname, 'public', 'error.html'));  // Serve the error page
-            }
-            if (result.rows.length > 0) {
-                const user = result.rows[0];
-
-                // Compare the entered password with the stored bcrypt hash
-                bcrypt.compare(password, user.password, (err, match) => {
-                    if (err) {
-                        console.error('Error comparing password:', err);
-                        return res.status(500).send('Internal Server Error');
-                    }
-
-                    if (match) {
-                        // Passwords match, proceed with login
-                        req.session.loggedin = true;
-                        req.session.userId = user.id;
-                        req.session.user = user;
-                        req.session.email = email;
-                        console.log('User logged in:', req.session.user);
-
-                        // Redirect to task manager page after login
-                        res.redirect('/taskmgr.html');
-                    } else {
-                        // If passwords don't match, redirect with error query parameter
-                        res.redirect('/login.html?error=incorrect');
-                    }
+    app.post("/", (req, res) => {
+        const { email, password } = req.body;
+    
+        const validEmail = "dahel@gmail.com";
+        const validPassword = "root";
+    
+        if (email && password) {
+            if (email === validEmail && password === validPassword) {
+                req.session.loggedin = true;
+                req.session.userId = 1;  // You can assign any user ID or fetch from DB if needed
+                req.session.user = { id: 1, email: validEmail }; // Store user data in session
+                req.session.email = validEmail;
+    
+                console.log('User logged in:', req.session.user);
+    
+                // Generate default tasks for the user
+                const defaultTasks = [
+                    { title: 'Complete registration', description: 'Fill out your profile details.', userId: 1, completed: false },
+                    { title: 'Start a new project', description: 'Create a new task for the upcoming project.', userId: 1, completed: false },
+                    { title: 'Review meeting notes', description: 'Go through the notes from the last team meeting.', userId: 1, completed: false },
+                ];
+    
+                // Insert default tasks into the database
+                defaultTasks.forEach(task => {
+                    pool.query(
+                        'INSERT INTO tasks (title, description, user_id, completed) VALUES ($1, $2, $3, $4)',
+                        [task.title, task.description, task.userId, task.completed],
+                        (err, result) => {
+                            if (err) {
+                                console.error('Error inserting default tasks:', err);
+                            }
+                        }
+                    );
                 });
+    
+                // Redirect to task manager page after login
+                res.redirect('/taskmgr.html');
             } else {
-                // If user is not found, redirect with error query parameter
-                res.redirect('/login.html?error=usernotfound');
+                res.redirect('/login.html?error=incorrect');
             }
-        });
-    } else {
-        // If email or password is missing, redirect with error query parameter
-        res.redirect('/login.html?error=missingcredentials');
-    }
-});
+        } else {
+            res.redirect('/login.html?error=missingcredentials');
+        }
+    });
 
 app.get('/tasks', (req, res) => {
     // Check if there's a search query in the URL parameters
