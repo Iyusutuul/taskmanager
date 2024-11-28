@@ -258,3 +258,30 @@
       padding: 10px 10px;
       border-radius: 10px;
       }
+      @media (max-width: 454px) {
+        .slidein {
+          animation: none; /* Disable animation on small screens */
+        }
+        .loginform{
+          width: 300px;
+          height: 200px;
+          align-items: center;
+          font-family: Lucida Sans Unicode;
+          text-align: center;
+          top: 180px;
+          position: fixed;
+          left: 19%;
+      }
+      .contain {
+        margin-left: 200px;
+        position: fixed;
+      }
+      li{
+        
+        position: fixed;
+      }
+      .loginBtn{
+        margin-left: 450px;
+        margin-top: -50px;
+      }
+      }
