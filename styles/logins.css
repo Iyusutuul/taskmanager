@@ -76,8 +76,8 @@ header *{
 }
 /**targets the button link and the divs behaviour***/
 .contain{
- margin-top: 50px;
- margin-left: 500px;
+ margin-top: 10px;
+ margin-left: 600px;
 }
 
 /***targets the logo text position***/
