@@ -1,23 +1,18 @@
-
 const express = require('express');
+require('dotenv').config();
+const { Pool } = require('pg');
 const path = require('path');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const http = require('http');
-const dotenv = require ('dotenv');
 const socketIo = require('socket.io');
 
 const app = express();
 const port = 3000;
 
-require("dotenv").config({
-    path: path.resolve(__dirname, '../../../.env')
-  });
-//.env configurations
-dotenv.config({path: './.env'})  
-// Database connection
-const pool = require('./lib/dbConfig')
+const server = http.createServer(app);
+const io = socketIo(server);  // Initialize socket.io
 
 app.use(session({
     secret: 'secret',
@@ -27,7 +22,29 @@ app.use(session({
     cookie: {maxAge: 3600000}
 }));
 
+io.on('connection', (socket) => {
+    console.log('A user connected');
+    socket.on('disconnect', () => {
+        console.log('A user disconnected');
+    });
+});
 
+const pool = new Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'taskmanager',
+    password: 'Huaweiy9@',
+    port: 5432,
+});
+
+// Connect to the PostgreSQL database
+pool.connect((err) => {
+    if (err) {
+        console.error('Database connection error:', err.stack);
+    } else {
+        console.log('Connected to the database');
+    }
+});
 
 // Middleware to parse JSON bodies and static files
 app.use(express.json());
@@ -39,37 +56,54 @@ app.use('/styles', express.static(path.join(__dirname, 'styles')));
 app.get("/", (req,res) =>{
     res.sendFile(path.resolve(__dirname, 'public', 'login.html'));  // Serve the HTML page
     });
-    
-    app.post("/", (req, res) => {
-        const { email, password } = req.body;
-    
-        // Hardcoded validation for email and password
-        const validEmail = "emaubong@gmail.com";
-        const validPassword = "root";
-    
-        if (email && password) {
-            // Validate email and password
-            if (email === validEmail && password === validPassword) {
-                // If credentials match, proceed with login
-                req.session.loggedin = true;
-                req.session.userId = 1;  // You can assign any user ID or fetch from DB if needed
-                req.session.user = { id: 1, email: validEmail }; // Store user data in session
-                req.session.email = validEmail;
-    
-                console.log('User logged in:', req.session.user);
-    
-                // Redirect to task manager page after successful login
-                res.redirect('/taskmgr.html');
-            } else {
-                // If credentials don't match, redirect with error query parameter
-                res.sendFile(path.resolve(__dirname, 'public', 'error.html'));  // Serve the HTML page
+
+app.post("/", (req, res) => {
+    const { email, password } = req.body;
+
+    if (email && password) {
+        // Query the database to get the user with the provided email
+        pool.query('SELECT * FROM users WHERE email = $1', [email], (err, result) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).send('Internal Server Error');
             }
-        } else {
-            // If email or password is missing, redirect with error query parameter
-            res.redirect('/login.html?error=missingcredentials');
-        }
-    });
-    
+
+            if (result.rows.length > 0) {
+                const user = result.rows[0];
+
+                // Compare the entered password with the stored bcrypt hash
+                bcrypt.compare(password, user.password, (err, match) => {
+                    if (err) {
+                        console.error('Error comparing password:', err);
+                        return res.status(500).send('Internal Server Error');
+                    }
+
+                    if (match) {
+                        // Passwords match, proceed with login
+                        req.session.loggedin = true;
+                        req.session.userId = user.id;
+                        req.session.user = user;
+                        req.session.email = email;
+                        console.log('User logged in:', req.session.user);
+
+                        // Redirect to task manager page after login
+                        res.redirect('/taskmgr.html');
+                    } else {
+                        // If passwords don't match, redirect with error query parameter
+                        res.redirect('/login.html?error=incorrect');
+                    }
+                });
+            } else {
+                // If user is not found, redirect with error query parameter
+                res.redirect('/login.html?error=usernotfound');
+            }
+        });
+    } else {
+        // If email or password is missing, redirect with error query parameter
+        res.redirect('/login.html?error=missingcredentials');
+    }
+});
+
 app.get('/tasks', (req, res) => {
     // Check if there's a search query in the URL parameters
     const searchQuery = req.query.query;
@@ -159,60 +193,62 @@ app.delete('/tasks/:id', (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
         });
 });
-// Fetch task details by ID (for editing)
+// Route for getting a task's data
 app.get('/tasks/:id', async (req, res) => {
-    const taskId = req.params.id; // Get task ID from the URL
-    console.log(taskId);
+    const taskId = req.params.id;
+    const userId = req.session.userId;
 
-    // Query to fetch the task from the database
-    const query = 'SELECT * FROM tasks WHERE id = $1';
-    
     try {
-        const result = await pool.query(query, [taskId]);
+        const query = 'SELECT * FROM tasks WHERE id = $1 AND user_id = $2';
+        const values = [taskId, userId];
+
+        const result = await pool.query(query, values);
+
         if (result.rowCount === 0) {
-            return res.status(404).json({ error: 'Task not found' });
+            return res.status(404).json({ error: 'Task not found.' });
         }
-        res.json(result.rows[0]); // Return the task as JSON
+
+        res.json(result.rows[0]); // Return the task data
     } catch (error) {
         console.error('Error fetching task:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Error fetching task. Please try again later.' });
     }
 });
 
 
-// PUT endpoint to update a task
-app.put('/tasks/:id', async (req, res) => {
-    const taskId = req.params.id; // Get task ID from the URL parameter
-    const { title, description, deadline, priority } = req.body; // Get updated task data from the request body
-
-    // SQL query to update task details in the database
-    const query = `
-        UPDATE tasks
-        SET title = $1, description = $2, deadline = $3, priority = $4
-        WHERE id = $5
-        RETURNING *`; // Returning the updated task
-
+app.put('/update-tasks/:id', async (req, res) => {
     try {
-        // Execute the query with the provided values
-        const result = await client.query(query, [title, description, deadline, priority, taskId]);
+        const taskId = req.params.id;
+        const { title, description, deadline, priority } = req.body;
 
-        if (result.rowCount === 0) {
-            return res.status(404).json({ error: 'Task not found' }); // Handle task not found
+        // Query to update the task in the database and return the updated task
+        const result = await pool.query(
+            'UPDATE tasks SET title = $1, description = $2, deadline = $3, priority = $4 WHERE id = $5 RETURNING *',
+            [title, description, deadline, priority, taskId]
+        );
+
+        // Check if the task exists and was updated
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Task not found or not updated' });
         }
 
-        const updatedTask = result.rows[0]; // Get the updated task
+        // Get the updated task
+        const updatedTask = result.rows[0];
 
-        // Send the updated task data back as a JSON response
-        res.json(updatedTask);
-    } catch (error) {
-        console.error('Error updating task:', error);
-        res.status(500).json({ error: 'Internal server error' }); // Handle server errors
+        // Send the updated task in the response
+        res.json({
+            success: true,
+            updatedTask: updatedTask
+        });
+    } catch (err) {
+        console.error('Error updating task:', err);
+        res.status(500).json({ error: 'Error updating task' });
     }
 });
 
 
 
-// Handle adding a task
+
 app.post("/success", async (req, res) => {
     const { title, description, deadline, priority } = req.body;
     const userId = req.session.userId;
@@ -234,20 +270,25 @@ app.post("/success", async (req, res) => {
         return res.status(400).json({ error: 'Invalid deadline date.' });
     }
 
-    const query = `INSERT INTO tasks (title, description, deadline, priority, user_id) VALUES ($1, $2, $3, $4, $5)`;
+    const query = `INSERT INTO tasks (title, description, deadline, priority, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING *`;
     const values = [title, description, deadlineDate, priority, userId];
 
     try {
         const result = await pool.query(query, values);
 
-        // If the insert was successful
         if (result.rowCount > 0) {
-            // Emit the new task to all connected clients
-            io.emit('new-task', { title, description, deadline: deadlineDate, priority });
+            const newTask = result.rows[0]; // Get the newly added task
 
-            res.status(201).json({
+            // Emit the 'new-task' event to all connected clients (or the specific client)
+            io.emit('new-task', newTask);
+
+            // Fetch all tasks for the user and send the updated task list as JSON
+            const tasksResult = await pool.query('SELECT * FROM tasks WHERE user_id = $1', [userId]);
+
+            // Send a JSON response with the updated task list
+            res.json({
                 message: 'Task added successfully!',
-                task: { title, description, deadline: deadlineDate, priority }
+                tasks: tasksResult.rows
             });
         } else {
             res.status(400).json({ error: 'Failed to add task.' });
@@ -259,20 +300,18 @@ app.post("/success", async (req, res) => {
 });
 
 
+
 app.get('/search-tasks', async (req, res) => {
     const { query } = req.query; // Get search query from URL parameters
-
     if (!query) {
         return res.status(400).send('Search query is required');
     }
-
     try {
         // Query PostgreSQL to search tasks by title or description
         const result = await pool.query(
             `SELECT * FROM tasks WHERE title ILIKE $1 OR description ILIKE $1`,
             [`%${query}%`]
         );
-
         // Send the results as JSON
         res.json(result.rows);
     } catch (err) {

@@ -43,20 +43,7 @@
 
   box-shadow: 1px 1px 2px rgba(185, 222, 221, 0.4);
   }
-  .alert_success{
-  margin-top: -35px;
-  margin-left: 80px;
-  width: 50%;
-  color:  rgb(133, 193, 44);
-  font-size: 14px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  }
-
-  .formheading i{
-    color: orangered;
-    font-size: 20px;
-  }
+  
   nav{
     margin-top: 0px;
     padding-top: 10px;
@@ -65,7 +52,7 @@
   nav ul li{
     display: block;
     list-style: none;
-    margin: 0px 10px;
+    margin: 5px 10px;
     border-radius: 10px;
     padding: 5px 10px;
     align-items: center; 
@@ -76,7 +63,7 @@
     border-collapse:collapse;
     text-decoration: none;
     position: relative;
-    color: black;
+    color: rgba(245, 245, 245, 0.679);
     font-size: 14px;
   
     padding: 5px 0px;/* trick effect makes the links move forward on hover*/
@@ -84,12 +71,11 @@
    }
    nav ul li:hover{
     cursor: pointer;
-    background: rgba(197, 181, 181, 0.905);
-    cursor: pointer;
+    color: white;
    }
    nav ul li a:hover{
     cursor: pointer;
-    color: black;
+    color: white;
     width: 180px;
    }
   
@@ -207,8 +193,7 @@
 
     /* Styling for the wrapper container */
     #header {
-        background-color: whitesmoke;
-        color: brown;
+        color: whitesmoke;
     }
 
     /* Basic styling for the page */
@@ -219,9 +204,9 @@
     }
 
     button {
-        padding: 6px 12px;
+        padding: 3px 7px;
         width: auto;
-        margin: 5px;
+        margin: 3px;
         font-size: 12px;
         cursor: pointer;
     }
@@ -241,6 +226,21 @@
         background-color: rgba(0, 0, 0, 0.5);
         /* Semi-transparent background */
     }
+        /* Modal Styles */
+        .editModal {
+          margin: 0;
+          display: none;
+          /* Hidden by default */
+          position: fixed;
+          z-index: 1;
+          /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          /* Semi-transparent background */
+      }
 
     #taskstable {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -316,7 +316,7 @@
 
     /* Style the table */
     #tasksTable {
-        margin-left: 420px;
+        margin-left: 415px;
         width: 50%;
         table-layout: auto;
         /* Allows better control over column widths */
@@ -356,18 +356,18 @@
         }
 
         /* Individual task result styling */
-        .taskResults {
-            background-color: red;
+        #taskResults {
+        justify-content: space-between;  
         border: 1px solid #ddd;
-        padding: 20px; /* Increase padding */
-        margin-bottom: 15px;
+        padding: 3px; /* Increase padding */
+        margin-bottom: 5px;
         border-radius: 8px;
         width: 100%; /* Ensure it takes full width */
         box-sizing: border-box; /* Ensure padding does not affect width */
         }
 
         .task-result:hover {
-            background-color: #f1f1f1;
+            background-color: red;
         }
 
         .task-title {

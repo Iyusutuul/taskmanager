@@ -1,11 +1,5 @@
-
-
-
 *{
-  margin: 0;
-  padding: 0;
   font-family:"Myriad Pro", sans-serif;
-  box-sizing: border-box;
 }
 
 .slidein {
@@ -27,79 +21,19 @@
   }
 }
 
-body{
-  margin:0px 100px;
-  padding: 0px 100px;
-}
-.rect_1{
-	position: absolute;
-    height: 5px;
-	top: 60;
-	right: 10;
-	left: 0;
-    width: 10%;
-	margin-left: 20%;
-}
-/************sets image width on mixed color navbar****/
-.rect_1 img{
-  width: 100%;
-}
-.rect_2{
-  width: 100%;
-  border: 0;
-    position:absolute;
-    top: 70px;
-    left: -10;
-    right: 0;
-}
-.rect_3{
-  position: absolute;
-  height: 5px;
-  top: 125;
-  right: 0;
-  left: 0;
-  width: 3%;
-  margin-left: 43%;
-  
-}
-/***targets both the logo and the links on the left***/
-#header{
-  margin: 20px;
-  margin-left: -500px;
- 
-  position: relative;
-  top: 40;
-  left: 17.5%;
-  right: 0;
-  display: flex;
-  align-items: center;
-}
+
 header *{
   display: inline-block;
 }
 /**targets the button link and the divs behaviour***/
 .contain{
- margin-top: 10px;
- margin-left: 600px;
-}
-
-/***targets the logo text position***/
-
-#alert_error{
-  display: none;
- color: #fff;
-  background-color: red;
-  padding: 5px;
-  border-radius: 2px;
 
 }
+
 /*targets the descriptive links container behaviour*/
  nav ul li{
-  display: inline-block;
+  display: block;
   list-style: none;
-  margin: -10px 15px;
-  text-align: center;
-  
  }
 /**targets the link texts itself**/
  nav ul li a{
@@ -139,53 +73,25 @@ header *{
   }
 
 body{
-            background-image: linear-gradient(160deg, #133950 0%, #309084 100%);
-            opacity: 0.9;
-            align-items: center;
-            justify-content: center;
-           
-            position: fixed;  
+      background-image: linear-gradient(160deg, black 10%, #309084 100%);
+      opacity: 0.9;
+      align-items: center;
+      justify-content: center;
+      position: fixed;  
             }
        a{
         color: orangered
        } 
         .loginform{
-            width: 300px;
+            width: 350px;
             height: 200px;
             align-items: center;
             font-family: Lucida Sans Unicode;
             text-align: center;
-            top: 180px;
+            top: 100px;
             position: fixed;
-            left: 39%;
+            left: 37%;
         }
-        @media (max-width: 454px) {
-          .slidein {
-            animation: none; /* Disable animation on small screens */
-          }
-          .loginform{
-            width: 300px;
-            height: 200px;
-            align-items: center;
-            font-family: Lucida Sans Unicode;
-            text-align: center;
-            top: 180px;
-            position: fixed;
-            left: 19%;
-        }
-        .contain {
-          margin-left: 200px;
-          position: fixed;
-        }
-        .contain li{
-          
-          position: fixed;
-          margin-left: -50px;
-        }
-        }
-        
-        
-        
        
         .logo {
             color:orangered;
@@ -193,10 +99,10 @@ body{
             top: 100px;
             left: 50%;
         }
-       /*** c6ntrols all the input boxes appearance **/
+       /*** controls all the input boxes appearance **/
         .loginform input{
-        width: 70%;
-        margin-top: 30px;
+        width: 100%;
+        margin-top: 20px;
         margin-bottom: -10px; 
         box-sizing: border-box;
         border: 1px solid #e5e7eb;
@@ -212,9 +118,10 @@ body{
         border:2px solid #ccc;
         }
         /***********targets the texts inside the input fields****************/
-        label, input{
-            text-align: center;
-        }
+        
+        label{
+          text-align: left;
+      }
         #header input:hover {
         border:2px solid #ccc;
         }
@@ -233,7 +140,55 @@ body{
 		
 		/* positions the login button on the inline-axis ****/
 		.login_button{
-		width: 50%;
+		width: 100%;
 		height: 20%;
-		margin-left: 25%;	
+    }
+    input:hover{
+     background-color: aquamarine;
+      }
+     .login_button input:hover{
+        border: 2px solid aqua;
+        cursor: pointer;
+        transform: scale(1.2);
+      }
+
+    @media (max-width: 454px) {
+      .slidein {
+        animation: none; /* Disable animation on small screens */
+      }
+      .loginform{
+        width: 350px;
+        height: 200px;
+        align-items: center;
+        font-family: Lucida Sans Unicode;
+        text-align: center;
+        top: 200px;
+        position: fixed;
+        left: 15%;
+    }
+    .contain {
+      margin-left: 200px;
+      position: fixed;
+    }
+    .contain li{
+      
+      position: fixed;
+      margin-left: -50px;
+    }
+    .loginform input{
+      width: 300px;
+      margin: 5px auto;
+      box-sizing: border-box;
+      border: 1px solid #e5e7eb;
+      border-radius: 5px;
+      padding: 15px 20px;
+      font-size: 17px;
+      font-weight: 400;
+      color: grey;
+      opacity: 0.9;
+      }
+    }
+    .login_button{
+      margin-top: 20px;
+      height: 150px;
     }

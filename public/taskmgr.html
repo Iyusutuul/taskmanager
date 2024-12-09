@@ -1,35 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/6bb208eccf.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="https://kit.fontawesome.com/6bb208eccf.js" crossorigin="anonymous"></script> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
     <link rel="stylesheet" href="styles/dashboard.css" type="text/css" media="all">
     <script src="script.js"></script>
 </head>
+<style>
+     input[type="text"]::placeholder {
+        text-align: left;
+        font-size: 13px;
+        }
+    #tasksTable td {
+    padding: 3px 10px; /* Adjust padding between cells (reduce the vertical space) */
+    vertical-align: middle; /* Ensures vertical alignment is centered */
+}
+    /* Container for search input */
+.search-container {
+    position: relative;
+    justify-content: center;
+    margin-left: 425px;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
 
-<body>
+/* Search input style */
+.search-input {
+    width: 400px;
+    padding: 12px 40px 12px 20px;  /* Space for the icon */
+    text-indent: 10px;
+    font-size: 17px;
+    font-size: 16px;
+    border-radius: 20px;  /* Rounded corners */
+    border: 1px solid #ccc;  /* Light gray border */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
+    outline: none;
+    transition: border 0.3s ease-in-out;
+    box-shadow: 0px 0px 36px 5px rgba(8, 220, 75, 0.824), 0px 1px 3px rgba(0, 0, 0, 0.08);
+}
+.search-input:hover{
+    background-color: #fff;
+  
+    transition: border 0.3s ease-in-out;
+}
+/* Focus effect for the input */
+.search-input:focus {
+    border: 1px solid #4285f4;  /* Gmail's blue color */
+    box-shadow: 0 0 5px rgba(66, 133, 244, 0.6);  /* Blue shadow effect */
+}
+
+/* Style for the magnifying glass icon */
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 25px;
+    color: #999;
+    pointer-events: none;
+}
+table{
+    background-color: transparent;
+}
+th{
+    background-color: transparent;
+    color: lawngreen;
+    padding: -5px;
+}
+td {
+    background-color:transparent;
+    
+}
+
+tr{
+    background-color: transparent;
+    color: whitesmoke;
+    height: 0px;
+}
+
+tr:hover{
+    background-color: rgba(126, 252, 0, 0.526);
+    border-radius: 10px;
+}
+
+/* Style individual task elements */
+.task {
+    display: flex;
+    margin: 5px auto;
+    justify-content: center;
+    align-items: flex-start;
+    border:none;          /* Add a border around each task */
+    border-radius: 8px;               /* Optional: rounded corners */
+    padding: 5px;                    /* Space inside each task */
+                         /* Set a fixed width for each task */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for a card effect */
+   
+    transition: transform 0.3s ease;  /* Optional: smooth transition on hover */
+}
+
+/* Add hover effect for each task card */
+.task:hover {
+    transform: translateY(-1px);      /* Move the card slightly up when hovered */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
+
+.task h3 {
+    font-size: 1.2em;                  /* Larger title */
+    margin-bottom: 10px;                /* Space below the title */
+    color: black;
+}
+
+.task p {
+    margin: 5px 0;                     /* Space between text paragraphs */
+    font-size: 1em;
+    color: black;                       /* Lighter color for text */
+}
+/* By default, show the table layout */
+#taskCardsContainer {
+    display: none; /* Hide cards by default */
+}
+
+/* Table layout for larger screens */
+@media (min-width: 768px) {
+    #tasksTable {
+        display: table;
+    }
+
+    #taskCardsContainer {
+        display: none; /* Hide cards on large screens */
+    }
+}
+
+/* Card layout for mobile screens */
+@media (max-width: 767px) {
+    #tasksTable {
+        display: none; /* Hide the table on small screens */
+    }
+
+    #taskCardsContainer {
+        display: block; /* Show cards on small screens */
+    }
+
+    .task-card {
+        border: 1px solid #ccc;
+        margin: 10px;
+        padding: 15px;
+        border-radius: 5px;
+        background-color: #fff;
+    }
+
+    .task-card-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .task-card-header h3 {
+        margin: 0;
+    }
+
+    .priority {
+        padding: 5px 10px;
+        border-radius: 3px;
+        background-color: #f0f0f0;
+        font-weight: bold;
+    }
+
+    .priority.Low {
+        background-color: #d4f8d4; /* Light green for Low priority */
+    }
+
+    .priority.Medium {
+        background-color: #fffac8; /* Light yellow for Medium priority */
+    }
+
+    .priority.High {
+        background-color: #f8d4d4; /* Light red for High priority */
+    }
+
+    .card-actions {
+        margin-top: 10px;
+    }
+
+    .ui.button {
+        margin-right: 10px;
+    }
+}
+
+</style>
+<body style="background-color: #000000;">
     <div id="header">
-        <div style="background-color: whitesmoke;" class="contain">
+        <div style="background-color: black;" class="contain">
             <nav>
                 <ul>
                     <span style="display: flex; width: 70%; font-weight: bolder;
-                        padding: 5px; letter-spacing: 4px;justify-content: center; 
-                        margin: 15px auto;background-color: orange;border-radius: 30px;
-                        border: 2px solid greenyellow;">TaskMaster</span>
+                        padding: 5px; letter-spacing: 10px;color: rgba(245, 245, 245, 0.645); 
+                        margin: 15px 35px;;font-size:20px;
+                    ">TaskMaster</span>
                     <li id="openModalBtn"><a style="font-weight:300" href=" ">
-                            <i style="background-color: lawngreen;padding: 3px;color: white;
-                        border-radius: 50px;" class="fa-solid fa-plus"></i>&#160&#160&#160Add Tasks</a></li>
+                            <i style="background-color: rgba(8, 220, 75, 0.824);padding: 3px;color: white;
+                        border-radius: 50px;" class="fa-solid fa-plus"></i>&#160&#160&#160Add Task</a></li>
                     <li id="openSearchModalBtn"><a href="#"><i
                                 class="fa-solid fa-magnifying-glass"></i>&#160&#160&#160&#160Search</a></li>
-                    <li style="background-color: rgba(140, 227, 53, 0.826);"><a href="#"><i
+                    <li style="background-color: rgba(8, 220, 75, 0.273);"><a href="#"><i
                                 class="fa-solid fa-inbox"></i>&#160&#160&#160&#160Inbox</a></li>
                     <li><a href="#"><i class="fa-solid fa-clock"></i>&#160&#160&#160&#160View Pending</a></li>
                     <li><a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>&#160&#160&#160&#160Logout</a>
@@ -38,15 +218,19 @@
             </nav>
         </div>
     </div>
-    <h2 style="margin-left: 420px;color: #4CAF50;">Inbox</h2>
-    <table style="margin-top: 0px; flex-grow: 1; padding: 1px;" id="tasksTable" class="ui celled table">
+    <div class="search-container">
+        <input type="text" id="search-input" class="search-input" placeholder="Search Tasks">
+        <span class="search-icon">&#128269;</span> <!-- Magnifying glass icon -->
+    </div>
+    <h2 style="margin-left: 425px;margin-bottom: 30px; color: #4CAF50;">Inbox</h2>
+    <table style="margin-top: -20px; flex-grow: 1; padding: 1px;border: none;background-color: #000000;" id="tasksTable" class="ui celled table">
         <thead>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Deadline</th>
-                <th>Priority</th>
-                <th>Actions</th>
+            <tr style="height: -20px">
+                <th style="background-color: #000000;color: lawngreen;;">Title</th>
+                <th style="background-color: #000000;color: lawngreen;" >Description</th>
+                <th style="background-color: #000000;color: lawngreen;">Deadline</th>
+                <th style="background-color: #000000;color: lawngreen;">Priority</th>
+                <th style="background-color: #000000;color: lawngreen;">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -54,7 +238,13 @@
         </tbody>
     </table>
     </div>
-    <!-- MODAL FOR ADDING/EDITING TASKS-->
+
+<!-- Container for task cards (visible on mobile screens) -->
+<div id="taskCardsContainer" class="task-cards-container">
+    <!-- Cards will be dynamically inserted here -->
+</div>
+
+    <!-- MODAL FOR ADDING TASKS-->
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close-btn" id="closeModalBtn" style="font-size: 30px;color: red;
@@ -68,35 +258,32 @@
                                     maxlength="50" placeholder="Title">
                             </label>
                         </div>
-                        <div>
-                            <label for="description">
-                                <input style="margin-top: 0px;" type="text" id="description" name="description"
-                                    required="" maxlength="100" placeholder="Description">
-                            </label>
-                        </div>
-                        <div>
-                            <label for="deadline">
-                                <input type="date" id="deadline" name="deadline" required>
-                            </label>
-                        </div>
+                    <div>
+                <label for="description">
+            <input style="margin-top: 0px;" type="text" id="description" name="description"
+        required="" maxlength="100" placeholder="Description">
+    </label>
+</div>
+    <div>
+        <label for="deadline">
+            <input type="date" id="deadline" name="deadline" required>
+                </label>
+                    </div>
                         <div class="ui container">
-                            <label for="priority"></label>
-                            <div style="margin: 0px 6%;" class="ui selection dropdown" id="priority-dropdown">
-                                <input type="hidden" id="priority" name="priority">
-                                <i class="dropdown icon"></i>
-                                <div class="default text">Select Priority</div>
-                                <div class="menu">
-                                    <div class="item" data-value="1">
-                                        <i class="red circle icon"></i> High Priority
-                                    </div>
-                                    <div class="item" data-value="2">
-                                        <i class="orange circle icon"></i> Medium Priority
-                                    </div>
-                                    <div class="item" data-value="3">
-                                        <i class="green circle icon"></i> Low Priority
-                                    </div>
-                                </div>
+                    <label for="priority"></label>
+                <div style="margin: 0px 6%;" class="ui selection dropdown" id="priority-dropdown">
+            <input type="hidden" id="priority" name="priority">
+        <i class="dropdown icon"></i>
+    <div class="default text">Select Priority</div>
+<div class="menu">
+    <div class="item" data-value="1">
+        <i class="red circle icon"></i> High Priority</div>
+            <div class="item" data-value="2">
+                <i class="orange circle icon"></i> Medium Priority</div>
+                    <div class="item" data-value="3">
+                        <i class="green circle icon"></i> Low Priority</div>
                             </div>
+                                </div>
                             <input type="hidden" id="taskId" name="taskId"> <!-- Task ID will be used for updates -->
                             <input type="hidden" id="user_id" name="user_id">
                             <!-- Replace "1" with the actual user ID from your backend session -->
@@ -106,24 +293,134 @@
                             </div>
                         </div>
                     </div>
-            </form>
+                </form>
             <div id="message"></div>
         </div>
     </div>
+</div>
+
+<!-- MODAL FOR EDITING TASKS-->
+<div id="editModal" class="editModal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeEditBtn" style="font-size: 30px;color: red;
+            margin-top: -270px;">&times;</span>
+        <form id="editForm" >
+            <div class="loginform">
+                <div class="inputs">
+                    <div>
+                        <label for="title">
+                            <input style="margin-top: 0px;" type="text" id="editTitle" name="title" required=""
+                                maxlength="50" placeholder="Title">
+                        </label>
+                    </div>
+                <div>
+            <label for="description">
+        <input style="margin-top: 0px;" type="text" id="editDescription" name="description"
+    required="" maxlength="100" placeholder="Description">
+</label>
+</div>
+<div>
+    <label for="deadline">
+        <input type="date" id="editDeadline" name="deadline" required>
+            </label>
+                </div>
+                    <div class="ui container">
+                <label for="priority"></label>
+            <div style="margin: 0px 6%;" class="ui selection dropdown" id="priority-dropdown">
+        <input type="hidden" id="editPriority" name="priority">
+    <i class="dropdown icon"></i>
+<div class="default text">Select Priority</div>
+<div class="menu">
+<div class="item" data-value="1">
+    <i class="red circle icon"></i> High Priority</div>
+        <div class="item" data-value="2">
+            <i class="orange circle icon"></i> Medium Priority</div>
+                <div class="item" data-value="3">
+                    <i class="green circle icon"></i> Low Priority</div>
+                        </div>
+                            </div>
+                        <input type="hidden" id="taskId" name="taskId"> <!-- Task ID will be used for updates -->
+                        <input type="hidden" id="user_id" name="user_id">
+                        <!-- Replace "1" with the actual user ID from your backend session -->
+                        <!-- <button style="background-color: gainsboro;" class="submitBtn" type="submit">Cancel</button> -->
+                         <div class="button-container">
+                        <button id="submitModalBttn" type="submit">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        <div id="message"></div>
     </div>
-    <!-- Modal for Searching Tasks -->
+</div>
+</div>
+
+<!-- Modal for Searching Tasks -->
     <div id="searchModal" class="modal">
         <div class="searchmodal-content">
             <span class="close-btn" id="closeSearchModalBtn"
                 style="font-size: 30px;color: #fff; margin-bottom: 10px;">&times;</span>
-            <input type="text" id="searchQuery" placeholder="Search or type a command" />
-            <button onclick="searchTasks()">Search</button>
-            <div style="color: #fff;
-        padding: 10px" id="taskResults"></div>
-        </div>
-    </div>
-    <script src="/socket.io/socket.io.js"></script>
+                    <input type="text" id="searchQuery" placeholder="Search or type a command" />
+                        <button onclick="searchTasks()">Search</button>
+                            <div style="color: #fff;padding: 10px" id="taskResults"></div>
+                                </div>
+                                    </div>
     <script>
+        $(document).ready(function () {
+    // Ensure form submission is intercepted and handled via AJAX
+    $('#taskForm').submit(function (e) {
+        e.preventDefault(); // Prevent the default form submission (this is key!)
+
+        // Serialize the form data for the AJAX request
+        const formData = $(this).serialize();
+
+        // Make the AJAX call to submit the form data
+        $.ajax({
+            type: 'POST',
+            url: '/success',  // Endpoint that handles task creation
+            data: formData,
+            success: function(response) {
+                // Check if the response contains tasks
+                if (response.tasks) {
+                    // Update the table with new tasks
+                    updateTaskList(response.tasks);
+                } else {
+                    console.error('Error: No tasks returned.');
+                    alert('Error: No tasks returned from the server.');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                alert('There was an error adding the task. Please try again.');
+            }
+        });
+    });
+
+
+    
+    // Function to update the task list dynamically in the table
+    function updateTaskList(tasks) {
+        const tasksTableBody = $('#tasksTable tbody');
+        tasksTableBody.empty();  // Clear the existing rows
+
+        // Loop through the tasks and append them to the table
+        tasks.forEach(function(task) {
+            tasksTableBody.append(`
+                <tr>
+                    <td>${task.title}</td>
+                    <td>${task.description}</td>
+                    <td>${new Date(task.deadline).toLocaleDateString()}</td>
+                    <td>${task.priority === 1 ? 'High' : task.priority === 2 ? 'Medium' : 'Low'}</td>
+                    <td>
+        <div class="button-container">
+            <button class="editBtn" onclick="editTask(${task.id})">Edit</button>
+            <button class="deleteBtn" onclick="deleteTask(${task.id})"><i class="fa fa-trash" aria-hidden="true"></i></button>
+        </div>
+    </td>`
+            );
+        });
+    }
+});
+
         $(document).ready(function () {
             // Initialize the dropdown after the document is ready
             $('#priority-dropdown').dropdown();
@@ -132,8 +429,7 @@
         window.onload = function () {
             loadTasks();  // Fetch tasks from backend when the page loads
         };
-
-
+        
         // Open Search Modal
         $('#openSearchModalBtn').click(function (e) {
             e.preventDefault();
@@ -145,24 +441,28 @@
             $('#searchModal').fadeOut();
         });
 
-        // Open modal for adding a new task
-        $('#openModalBtn').click(function (e) {
-            e.preventDefault();
-            isEdit = false; // Set flag for adding a task
-            $('#taskForm')[0].reset(); // Reset form
-            $('#formTitle').text('Add Task'); // Change modal title
-            $('#taskId').val(''); // Clear the task ID
-            $('#taskForm').attr('action', '/success');  // Set action for adding a task
-            $('#taskForm').attr('method', 'POST');  // Set method to POST for adding a task
-            $('#submitBtn').text('Add Task'); // Change button text to "Add Task"
-            $('#modal').fadeIn(); // Show modal
-        });
 
-        // Close Modal when clicking the 'X' button
-        $('#closeModalBtn').click(function () {
-            $('#modal').fadeOut();
-            $('#taskForm')[0].reset();  // Reset the form when closing the modal
-        });
+    $('#openModalBtn').click(function (e) {
+    e.preventDefault();
+    isEdit = false; // Set flag for adding a task
+    $('#taskForm')[0].reset(); // Reset form for adding new task
+    $('#formTitle').text('Add Task'); // Change modal title
+    $('#taskId').val(''); // Clear the task ID
+    $('#taskForm').attr('action', '/success'); // Set action for adding a task
+    $('#taskForm').attr('method', 'POST'); // Set method to POST for adding a task
+    $('#submitBtn').text('Add Task'); // Change button text to "Add Task"
+    $('#modal').fadeIn(); // Show modal
+});
+
+        
+
+$('#closeModalBtn').click(function () {
+    $('#modal').fadeOut();
+    if (!isEdit) {
+        $('#taskForm')[0].reset();  // Reset only if adding a task
+    }
+});
+
 
         // Close Modal if clicking outside the modal
         $(window).click(function (event) {
@@ -171,65 +471,141 @@
             }
         });
 
+    function searchTasks() {
+    var query = document.getElementById('searchQuery').value.trim();
 
-        function searchTasks() {
-            var query = document.getElementById('searchQuery').value.trim();
+    if (query.length === 0) {
+        document.getElementById('taskResults').innerHTML = '<p>Please enter a search term.</p>';
+        return;
+    }
 
-            if (query.length === 0) {
-                document.getElementById('taskResults').innerHTML = '<p>Please enter a search term.</p>';
+    // Fetch search results from the backend API
+    fetch(`/search-tasks?query=${encodeURIComponent(query)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();  // Parse the JSON response
+        })
+        .then(data => {
+            // Check if the data is undefined or empty
+            if (!data || data.length === 0) {
+                document.getElementById('taskResults').innerHTML = '<p>No tasks found.</p>';
                 return;
             }
 
-            // Fetch search results from the backend API
-            fetch(`/search-tasks?query=${encodeURIComponent(query)}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    displaySearchResults(data);  // Display the search results
-                })
-                .catch(error => {
-                    console.error('Error fetching search results:', error);
-                    document.getElementById('taskResults').innerHTML = '<p>Error fetching search results. Please try again later.</p>';
-                });
-        }
+            // Proceed with displaying the data if found
+            displaySearchResults(data); // A function that handles the display
+        })
+        .catch(error => {
+            console.error('Error fetching search results:', error);
+            document.getElementById('taskResults').innerHTML = '<p>Error fetching search results. Please try again later.</p>';
+        });
+}
 
+        function displaySearchResults(tasks) {
+        // Assuming tasks is an array of task objects
+        const taskResultsContainer = document.getElementById('taskResults');
+        taskResultsContainer.innerHTML = ''; // Clear previous results
+
+        tasks.forEach(task => {
+        const taskElement = document.createElement('div');
+        taskElement.classList.add('task');
+        taskElement.innerHTML = `
+        <td>${task.title}</td>&#160|&#160
+        <td>${task.description}</td>&#160|&#160
+        <td>Priority: ${task.priority}</td>`;
+        taskResultsContainer.appendChild(taskElement);
+    });
+}
         function loadTasks() {
             const searchQuery = document.getElementById('searchQuery').value;
             const url = searchQuery ? `/tasks?query=${encodeURIComponent(searchQuery)}` : '/tasks';
 
             fetch(url)  // Fetch tasks from the backend
-                .then(response => response.json())
-                .then(tasks => {
-                    const taskTableBody = document.querySelector('#tasksTable tbody');
-                    taskTableBody.innerHTML = ''; // Clear any existing rows
+            .then(response => response.json())
+            .then(tasks => {
+            const taskTableBody = document.querySelector('#tasksTable tbody');
+            taskTableBody.innerHTML = ''; // Clear any existing rows
+            tasks.forEach(task => {
+            const row = document.createElement('tr');
+            // Map priority values to Low, Medium, High
+                let priorityLabel = '';
+                switch (task.priority) {
+                    case 1:
+                        priorityLabel = 'High';
+                        break;
+                    case 2:
+                        priorityLabel = 'Medium';
+                        break;
+                    case 3:
+                        priorityLabel = 'Low';
+                        break;
+                    default:
+                        priorityLabel = 'Unknown'; // For unexpected values
+                }
 
-                    tasks.forEach(task => {
-                        const row = document.createElement('tr');
-
-                        // Create task data cells
-                        row.innerHTML = `
-                            <td>${task.title}</td>
-                            <td>${task.description}</td>
-                            <td>${new Date(task.deadline).toLocaleDateString()}</td>
-                            <td>${task.priority}</td>
-                             <td>
+        // Create task data cells
+        row.innerHTML = `
+        <td>${task.title}</td>
+        <td>${task.description}</td>
+        <td>${new Date(task.deadline).toLocaleDateString()}</td>
+        <td>${priorityLabel}</td>
+        <td>
         <div class="button-container">
             <button class="editBtn" onclick="editTask(${task.id})">Edit</button>
-            <button class="deleteBtn" onclick="deleteTask(${task.id})">Delete</button>
+            <button class="deleteBtn" onclick="deleteTask(${task.id})"><i class="fa fa-trash" aria-hidden="true"></i></button>
         </div>
-    </td>
-                        `;
+    </td>`;
 
-                        taskTableBody.appendChild(row);
-                    });
-                })
-                .catch(error => console.error('Error fetching tasks:', error));
+taskTableBody.appendChild(row);
+                     
+ // Create a card for mobile layout
+ const card = document.createElement('div');
+    card.classList.add('task-card');
+        card.innerHTML = `
+        <div class="task-card-header">
+            <h3>${task.title}</h3>
+                    <span class="priority">${priorityLabel}</span>
+                    </div>
+                    <p><strong>Description:</strong> ${task.description}</p>
+                    <p><strong>Deadline:</strong> ${new Date(task.deadline).toLocaleDateString()}</p>
+                    <div class="card-actions">
+                    <button class="ui button editBtn" onclick="editTask(${task.id})">Edit</button>
+                    <button class="ui button deleteBtn" onclick="deleteTask(${task.id})">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                    </div>
+                `;
+                taskCardsContainer.appendChild(card);
+            });
+        })
+            .catch(error => console.error('Error fetching tasks:', error));
         }
-    </script>
-    <script src="editModal.js"></script> <!-- First script file for modal functionality -->
-</body>
+        socket.on('new-task', (task) => {
+    // Add the new task directly to the DOM (no need to fetch all tasks)
+    const taskTableBody = document.querySelector('#tasksTable tbody');
+    const row = document.createElement('tr');
+    
+    row.innerHTML = `
+        <td>${task.title}</td>
+        <td>${task.description}</td>
+        <td>${new Date(task.deadline).toLocaleDateString()}</td>
+        <td>${getPriorityText(task.priority)}</td>
+        <td>
+            <button class="editBtn" onclick="editTask(${task.id})">Edit</button>
+            <button class="delete-btn" data-id="${task.id}">
+                <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
+        </td>
+    `;
+    
+    taskTableBody.appendChild(row);
+});
+
+
+
+        </script>
+        <script src="script.js" ></script> <!-- First script file for modal functionality -->
+    </body>
 </html>

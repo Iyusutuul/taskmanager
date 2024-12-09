@@ -1,71 +1,3 @@
-
-window.onload = function () {
-    loadTasks();  // Fetch tasks from backend when the page loads
-};
-$(document).ready(function () {
-    // Ensure form submission is intercepted and handled via AJAX
-    $('#editForm').submit(function (e) {
-        e.preventDefault(); // Prevent the default form submission (this is key!)
-
-        // Get the task ID from the form
-        const taskId = $('#taskId').val(); // Assuming you are storing the task ID in a hidden input field with id 'taskId'
-
-        // Manually collect the form data
-        const formData = {
-            title: $('#editTitle').val(),
-            description: $('#editDescription').val(),
-            deadline: $('#editDeadline').val(),
-            priority: $('#editPriority').val(),
-            taskId: taskId
-        };
-
-        // Make the AJAX call to submit the form data
-        $.ajax({
-            type: 'PUT',
-            url: `/update-tasks/${taskId}`,  // Dynamically include the task ID in the URL
-            data: formData,
-            success: function(response) {
-                console.log('Server response:', response); // Log the full response
-                // Check if the response contains tasks
-                if (response.tasks) {
-                    updateTaskList(response.tasks);
-                } else {
-                    console.error('Error: No tasks returned.');
-                    alert('Updated successfully');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                alert('There was an error updating the task. Please try again.');
-            }
-        });
-    });
-
-  // Function to update the task list dynamically in the table
-  function updateTaskList(tasks) {
-    const tasksTableBody = $('#tasksTable tbody');
-    tasksTableBody.empty();  // Clear the existing rows
-
-    // Loop through the tasks and append them to the table
-    tasks.forEach(function(task) {
-        tasksTableBody.append(`
-            <tr>
-                <td>${task.title}</td>
-                <td>${task.description}</td>
-                <td>${new Date(task.deadline).toLocaleDateString()}</td>
-                <td>${task.priority === 1 ? 'High' : task.priority === 2 ? 'Medium' : 'Low'}</td>
-                <td>
-    <div class="button-container">
-        <button class="editBtn" onclick="editTask(${task.id})">Edit</button>
-        <button class="deleteBtn" onclick="deleteTask(${task.id})"><i class="fa fa-trash" aria-hidden="true"></i></button>
-    </div>
-</td>`
-        );
-    });
-}
-});
-
-
  // Function to load tasks
   function loadTasks() {
     const searchQuery = document.getElementById('searchQuery').value;
@@ -163,9 +95,7 @@ socket.on('new-task', (task) => {
   
   taskTableBody.appendChild(row);
 });
-
-
-
+const urlParams = new URLSearchParams(window.location.search);
 const errorType = urlParams.get('error');
 
 // Open the modal for editing a task
@@ -175,33 +105,30 @@ function editTask(taskId) {
       .then(response => response.json())
       .then(task => {
           // Populate the form with task data
-          document.getElementById('editTitle').value = task.title;
-          document.getElementById('editDescription').value = task.description;
-          document.getElementById('editDeadline').value = task.deadline.split('T')[0]; // Adjust if deadline is in ISO format
-          document.getElementById('editPriority').value = task.priority;
+          document.getElementById('title').value = task.title;
+          document.getElementById('description').value = task.description;
+          document.getElementById('deadline').value = task.deadline.split('T')[0]; // Adjust if deadline is in ISO format
+          document.getElementById('priority').value = task.priority;
           document.getElementById('taskId').value = task.id;
 
           // Change the form action and method for update
-     
-          document.getElementById('editForm').action = `/update-tasks/${taskId}`; // Correct URL format
-          document.getElementById('editForm').method = 'PUT'; // Use PUT for updates
+          document.getElementById('taskForm').action = `/update-tasks/${task.id}`;
+          document.getElementById('taskForm').method = 'PUT'; // Use PUT for updates
 
-      // Show the modal
-      document.getElementById('editModal').style.display = 'flex'; // Use 'flex' to display it
-
-      // Close Search Modal
-      $('#closeEditBtn').click(function () {
-    $('#editModal').fadeOut();
-});
-
-// Close modal if clicking outside the modal
-window.onclick = function(event) {
-  if (event.target === document.getElementById('editModal')) {
-      document.getElementById('editModal').style.display = 'none';
-  }
-}
+          // Show the modal
+          document.getElementById('modal').style.display = 'flex'; // Use 'flex' to display it
       })
       .catch(error => console.error('Error fetching task:', error));
 }
 
+// Close the modal when clicking the 'X' button
+document.getElementById('closeModalBtn').onclick = function() {
+  document.getElementById('modal').style.display = 'none';
+}
 
+// Close modal if clicking outside the modal
+window.onclick = function(event) {
+  if (event.target === document.getElementById('modal')) {
+      document.getElementById('modal').style.display = 'none';
+  }
+}
