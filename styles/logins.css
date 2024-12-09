@@ -92,13 +92,7 @@ body{
             position: fixed;
             left: 37%;
         }
-       
-        .logo {
-            color:orangered;
-            position: fixed;
-            top: 100px;
-            left: 50%;
-        }
+        
        /*** controls all the input boxes appearance **/
         .loginform input{
         width: 100%;
@@ -152,28 +146,43 @@ body{
         transform: scale(1.2);
       }
 
-    @media (max-width: 454px) {
+    @media (max-width: 480px) {
       .slidein {
         animation: none; /* Disable animation on small screens */
       }
       .loginform{
-        width: 350px;
-        height: 200px;
-        align-items: center;
-        font-family: Lucida Sans Unicode;
-        text-align: center;
-        top: 200px;
-        position: fixed;
-        left: 15%;
+    width: 350px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Lucida Sans Unicode;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     }
     .contain {
       margin-left: 200px;
       position: fixed;
     }
     .contain li{
-      
-      position: fixed;
-      margin-left: -50px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 30px;
+      margin-top: 70px;;
+    }
+    .contain li a:hover{
+      background-color: antiquewhite;
+    }
+    .contain li a{
+      align-items: center;
+      padding: 12px 25px; /* Increase padding for mobile */
+      font-size: 20px; /* Adjust font size for smaller screens */
+      width: 100%; /* Make the button take up the full width */
     }
     .loginform input{
       width: 300px;
@@ -187,6 +196,19 @@ body{
       color: grey;
       opacity: 0.9;
       }
+      	/* targets the place holder texts ****/
+        input[type="email"]::placeholder {
+          text-align: left;
+          font-size: 17px;
+          padding-left: 50px;
+         
+          }
+          input[type="password"]::placeholder {
+          text-align: left;
+          font-size: 17px;
+          padding-left: 50px;
+        
+          }
     }
     .login_button{
       margin-top: 20px;
