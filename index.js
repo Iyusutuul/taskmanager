@@ -38,7 +38,10 @@ io.on('connection', (socket) => {
 // });
 
 const pool = new Pool({
-    connectionString: process.env.DB_URL,  // The entire connection URL is used here
+    connectionString: process.env.DB_URL,
+    ssl: {
+      rejectUnauthorized: false, // Adjust this if you have specific SSL certs
+    },
   });
   
   pool.connect()
