@@ -29,13 +29,21 @@ io.on('connection', (socket) => {
     });
 });
 
+// const pool = new Pool({
+//     user: 'postgres',
+//     host: 'localhost',
+//     database: 'taskmanager',
+//     password: 'Huaweiy9@',
+//     port: 5432,
+// });
+
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'taskmanager',
-    password: 'Huaweiy9@',
-    port: 5432,
-});
+    connectionString: process.env.DB_URL,  // The entire connection URL is used here
+  });
+  
+  pool.connect()
+    .then(() => console.log('Connected to the database'))
+    .catch(err => console.error('Database connection error:', err.stack));
 
 // Connect to the PostgreSQL database
 pool.connect((err) => {
