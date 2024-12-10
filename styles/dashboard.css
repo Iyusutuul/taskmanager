@@ -4,7 +4,9 @@
     font-family:"Myriad Pro";
     box-sizing: border-box;
   }
-  
+  body {
+    overflow-x: hidden;  /* Prevent horizontal scrolling */
+}
 
   .rect_1{
     width: 100%;

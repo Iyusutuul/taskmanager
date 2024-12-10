@@ -6,13 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- <script src="https://kit.fontawesome.com/6bb208eccf.js" crossorigin="anonymous"></script> -->
+    /<script src="https://kit.fontawesome.com/6bb208eccf.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
     <link rel="stylesheet" href="styles/dashboard.css" type="text/css" media="all">
     <script src="script.js"></script>
 </head>
 <style>
+    body {
+    overflow-x: hidden;  /* Prevent horizontal scrolling */
+}
+
      input[type="text"]::placeholder {
         text-align: left;
         font-size: 13px;
@@ -112,7 +116,7 @@ tr:hover{
 
 .task h3 {
     font-size: 1.2em;                  /* Larger title */
-    margin-bottom: 10px;                /* Space below the title */
+    margin-bottom: 0px;                /* Space below the title */
     color: black;
 }
 
@@ -125,6 +129,11 @@ tr:hover{
 #taskCardsContainer {
     display: none; /* Hide cards by default */
 }
+.inbox {
+        margin-left: 425px;
+        margin-bottom: 30px;
+        color: #4CAF50;
+    }
 
 /* Table layout for larger screens */
 @media (min-width: 768px) {
@@ -138,7 +147,7 @@ tr:hover{
 }
 
 /* Card layout for mobile screens */
-@media (max-width: 767px) {
+@media (max-width: 480px) {
     #tasksTable {
         display: none; /* Hide the table on small screens */
     }
@@ -148,22 +157,27 @@ tr:hover{
     }
 
     .task-card {
-        border: 1px solid #ccc;
-        margin: 10px;
+        width: 70%;
+        height: 180px;
+        color: whitesmoke;
+        margin: 0px 60px;
         padding: 15px;
         border-radius: 5px;
-        background-color: #fff;
+        background-color: black;
     }
 
     .task-card-header {
         display: flex;
+        color: whitesmoke;
         justify-content: space-between;
         font-size: 1.2em;
         margin-bottom: 10px;
     }
 
-    .task-card-header h3 {
+    .task-card-header h4 {
         margin: 0;
+        color: whitesmoke;
+   
     }
 
     .priority {
@@ -185,18 +199,66 @@ tr:hover{
         background-color: #f8d4d4; /* Light red for High priority */
     }
 
-    .card-actions {
-        margin-top: 10px;
+ 
+    .contain {
+        display: none;  /* Sidebar is hidden on mobile devices */
     }
+    .breadcrumb-icon {
+    display: block;
+    font-size: 30px;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    left: 400px;
+    background-color: #333;
+    color: lawngreen;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .search-container {
 
-    .ui.button {
-        margin-right: 10px;
-    }
+   
+    margin-left: 30px;
+    margin-top: 60px;
+    margin-bottom: 30px;
 }
+/* Search input style */
+.search-input {
+    width: 85%;
+
+    padding: 10px 15px;     /* Comfortable padding */
+    font-size: 16px;        /* Readable font size */
+    border-radius: 5px;     /* Rounded corners */
+    margin: 10px auto;      /* Centered with some margin */
+    text-indent: 10px;
+    border-radius: 20px;  /* Rounded corners */
+    border: 1px solid #ccc;  /* Light gray border */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
+    outline: none;
+    transition: border 0.3s ease-in-out;
+    box-shadow: 0px 0px 36px 5px rgba(8, 220, 75, 0.824), 0px 1px 3px rgba(0, 0, 0, 0.08);
+}
+.inbox {
+            margin-left: 35px; /* Reduce margin on mobile */
+            margin-bottom: 5px;
+            font-size: 1.5rem; /* Adjust font size for smaller screens */
+        }
+        .card-actions{
+            display: flex;
+        flex-direction: row;  /* Arrange buttons side by side */
+        justify-content: space-around; /* Distribute space evenly */
+        width: 100%;  /* Full width on mobile */
+        }
+}
+
+  
 
 </style>
 <body style="background-color: #000000;">
     <div id="header">
+        <div id="breadcrumb-icon" class="breadcrumb-icon">
+            &#x2630; <!-- Hamburger icon, you can replace this with a custom icon -->
+          </div>
         <div style="background-color: black;" class="contain">
             <nav>
                 <ul>
@@ -222,7 +284,7 @@ tr:hover{
         <input type="text" id="search-input" class="search-input" placeholder="Search Tasks">
         <span class="search-icon">&#128269;</span> <!-- Magnifying glass icon -->
     </div>
-    <h2 style="margin-left: 425px;margin-bottom: 30px; color: #4CAF50;">Inbox</h2>
+    <h2 class="inbox">Inbox</h2>
     <table style="margin-top: -20px; flex-grow: 1; padding: 1px;border: none;background-color: #000000;" id="tasksTable" class="ui celled table">
         <thead>
             <tr style="height: -20px">
@@ -565,17 +627,18 @@ taskTableBody.appendChild(row);
     card.classList.add('task-card');
         card.innerHTML = `
         <div class="task-card-header">
-            <h3>${task.title}</h3>
-                    <span class="priority">${priorityLabel}</span>
+            <h4>${task.title}</h4>
+                    <span style="font-weight: lighter; background-color: black; color: lawngreen" class="priority">${priorityLabel}</span>
                     </div>
-                    <p><strong>Description:</strong> ${task.description}</p>
-                    <p><strong>Deadline:</strong> ${new Date(task.deadline).toLocaleDateString()}</p>
+                     ${task.description}</p>
+                     ${new Date(task.deadline).toLocaleDateString()}</p>
                     <div class="card-actions">
-                    <button class="ui button editBtn" onclick="editTask(${task.id})">Edit</button>
-                    <button class="ui button deleteBtn" onclick="deleteTask(${task.id})">
+                    <button style="background-color: black;color: white;padding: 0px" class="ui button editBtn" onclick="editTask(${task.id})">Edit</button>
+                    <button style="background-color: black;color: white;" class="ui button deleteBtn" onclick="deleteTask(${task.id})">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                     </div>
+                    <hr style= "color: whitesmoke" >
                 `;
                 taskCardsContainer.appendChild(card);
             });

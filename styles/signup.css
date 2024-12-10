@@ -299,7 +299,7 @@ body{
         transition: transform 0.2s ease;
       }
       .loginform input{
-        width: 300px;
+        width: 280px;
         margin: 5px auto;
         box-sizing: border-box;
         border: 1px solid #e5e7eb;
