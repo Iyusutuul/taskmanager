@@ -34,7 +34,7 @@
   
   
   /**targets just the sidebar links***/
-  .contain{
+  #contain{
   position: fixed;
   top: 0;
   left: 0;
