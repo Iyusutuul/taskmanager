@@ -220,12 +220,16 @@ tr:hover{
     border-radius: 5px;
   }
   .search-container {
+    position: fixed;
     margin-left: 95px;
     margin-top: 0px;
     margin-bottom: -10px;
 }
 /* Search input style */
 .search-input {
+ 
+
+    z-index: 1000; /* Ensure it stays above other content */
     width: 85%;
     background-color: #000000;
     padding: 7px 15px;     /* Comfortable padding */
@@ -239,7 +243,7 @@ tr:hover{
     transition: border 0.3s ease-in-out;
     box-shadow: 0px 0px 36px 5px rgba(8, 220, 75, 0.824), 0px 1px 3px rgba(0, 0, 0, 0.08);
 }
-.inbox {
+.inbox {    margin-top: 70px;
             margin-left: 25px; /* Reduce margin on mobile */
             margin-bottom: 5px;
             font-size: 1.5rem; /* Adjust font size for smaller screens */
