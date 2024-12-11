@@ -222,7 +222,7 @@ tr:hover{
   }
   .search-container {
     margin-left: 70px;
-    margin-top: -10px;
+    margin-top: 0px;
     margin-bottom: -10px;
 }
 /* Search input style */
@@ -650,7 +650,7 @@ card.innerHTML = `
         <div class="deadline-and-buttons">
             <p class="task-deadline">${new Date(task.deadline).toLocaleDateString()}</p>
             
-                <button style="background-color: black;margin-left: 245px; color: grey; padding: 2px 10px;" class="ui button editBtn" onclick="editTask(${task.id})"><i class="fa fa-edit" aria-hidden="true"></i> </button>
+                <button style="background-color: black;margin-left: 200px; color: grey; padding: 2px 10px;" class="ui button editBtn" onclick="editTask(${task.id})"><i class="fa fa-edit" aria-hidden="true"></i> </button>
                 <button style="background-color: black; color: red; padding: 2px 10px;" class="ui button deleteBtn" onclick="deleteTask(${task.id})">
                     <i class="fa fa-trash" aria-hidden="true"></i></button>
              
