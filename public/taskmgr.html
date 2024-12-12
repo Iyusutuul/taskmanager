@@ -159,12 +159,13 @@ tr:hover{
     }
 
     .task-card {
-        width: 95%;
+        width: 60%;
+        height:150px;
         color: whitesmoke;
-        margin: 10px 18px;
+        margin: 5px 55px;
         padding: 10px;
         border-radius: 5px;
-        background-color: rgba(0, 0, 0, 0.083);
+        background-color: rgba(0, 0, 0, 0);
     }
     .task-card:hover {
     transform: translateY(-1px);      /* Move the card slightly up when hovered */
@@ -176,7 +177,7 @@ tr:hover{
         color: whitesmoke;
         justify-content: space-between;
         font-size: 1.2em;
-        margin-bottom: px;
+        margin-bottom: -10px;
     }
     .task-card-header h4 {
         margin: 0;
@@ -210,13 +211,13 @@ tr:hover{
         display: none;  /* Sidebar is hidden on mobile devices */
     }
     .breadcrumb-icon {
-        position: fixed;
+    position: static;
     display: block;
-    font-size: 25px;
+    font-size: 20px;
     cursor: pointer;
     position: fixed;
     top: 5px;
-    left: 90%;
+    left: 25px;
     color: #4CAF50;
     padding: 10px;
     border-radius: 5px;
@@ -225,8 +226,8 @@ tr:hover{
     position: fixed;
     margin-left: 20px;
     margin-right: 20px;
-    margin-top: 25px;
-    margin-bottom: 50px;
+    margin-top: 100px;
+    
 }
 .search-icon{
     font-size: 15px;
@@ -246,8 +247,8 @@ tr:hover{
     transition: border 0.3s ease-in-out;
     box-shadow: 0px 0px 26px 0px rgba(31, 107, 55, 0.824), 0px 1px 3px rgba(0, 0, 0, 0.08);
 }
-.inbox {    margin-top: 10px;
-            margin-left: 20px; /* Reduce margin on mobile */
+.inbox {    margin-bottom: 0px;
+            margin-left: 60px; /* Reduce margin on mobile */
             font-size: 1.5rem; /* Adjust font size for smaller screens */
         }
         .card-actions{
@@ -269,9 +270,21 @@ tr:hover{
         font-weight: bolder;
         color: rgba(0, 0, 0, 0.481);
     }
+    .styled-hr{
+         border: none;            /* Removes the default border */
+    height: 2px;             /* Sets the thickness of the line */
+    background-color: #4CAF50; /* Sets the color of the line */
+    width: 80%;              /* Sets the width of the line */
+    margin: 20px auto;       /* Adds space above and below */
+    }
+    .inbox{
+    font-size: 2.2em;                  /* Larger title */
+    padding: 30px 0px;                /* Space below the title */
+    color: rgb(20, 209, 102);
+}
 }
 </style>
-<body style="background-color: rgb(41, 31, 31);">
+<body style="background-color: rgba(0, 0, 0, 0.761)">
     <div id="header">
         <div id="breadcrumb-icon" class="breadcrumb-icon">
             &#x2630; <!-- Hamburger icon, you can replace this with a custom icon -->
@@ -297,10 +310,10 @@ tr:hover{
             </nav>
         </div>
     </div>
-    <div class="search-container">
+    <!-- <div class="search-container">
         <input type="text" id="search-input" class="search-input" placeholder="Search Tasks">
         <span class="search-icon">&#128269;</span> <!-- Magnifying glass icon -->
-    </div>
+    </div> -->
     <h2 class="inbox">Inbox</h2>
     <table style="margin-top: -20px; flex-grow: 1; padding: 1px;border: none;background-color: #000000;" id="tasksTable" class="ui celled table">
         <thead>
@@ -644,9 +657,10 @@ const card = document.createElement('div');
 card.classList.add('task-card');
 
 card.innerHTML = `
-    <div  style="line-height: .2em"; class="task-card-header">
+<div style="margin-top: 0px" class="card-container">
+    <div class="task-card-header">
         <h2>${task.title}</h2>
-        <span style="color:red" >${priorityLabel}</span>
+        <span style="color:yellow" >${priorityLabel}</span>
     </div>
     <p style="color: gainsboro;">${task.description}</p>
     <div class="card-actions">
@@ -658,7 +672,8 @@ card.innerHTML = `
             </div>
         </div>
     </div>
-    <hr style="color: gainsboro" />
+    </div>
+    <hr class="styled-hr">
 `;
 
                 taskCardsContainer.appendChild(card);
