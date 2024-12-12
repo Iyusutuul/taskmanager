@@ -159,9 +159,9 @@ tr:hover{
     }
 
     .task-card {
-        width: 85%;
+        width: 90%;
         color: whitesmoke;
-        margin: 10px 15px;
+        margin: 10px 18px;
         padding: 10px;
         border-radius: 5px;
         background-color: rgba(0, 0, 0, 0.083);
@@ -215,7 +215,7 @@ tr:hover{
     cursor: pointer;
     position: fixed;
     top: 5px;
-    left: 75%;
+    left: 80%;
     color: #4CAF50;
     padding: 10px;
     border-radius: 5px;
@@ -270,7 +270,7 @@ tr:hover{
     }
 }
 </style>
-<body style="background-color: gainsboro;">
+<body style="background-color: rgb(41, 31, 31);">
     <div id="header">
         <div id="breadcrumb-icon" class="breadcrumb-icon">
             &#x2630; <!-- Hamburger icon, you can replace this with a custom icon -->
@@ -648,7 +648,7 @@ card.innerHTML = `
         <span style="font-weight: 100;font-size: 13px; border-radius: 10%; background-color: gainsboro;
         color: black" class="priority">${priorityLabel}</span>
     </div>
-    <p style="color: rgba(0, 0, 0, 0.481);">${task.description}</p>
+    <p style="color: gainsboro;">${task.description}</p>
     <div class="card-actions">
         <div class="deadline-and-buttons">
             <p class="task-deadline">${new Date(task.deadline).toLocaleDateString()}</p>
