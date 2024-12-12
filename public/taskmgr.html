@@ -159,7 +159,7 @@ tr:hover{
     }
 
     .task-card {
-        width: 80%;
+        width: 85%;
         color: whitesmoke;
         margin: 10px 15px;
         padding: 10px;
@@ -266,6 +266,7 @@ tr:hover{
     p{
         font-size: 13px;
         font-weight: bolder;
+        color: rgba(0, 0, 0, 0.481);
     }
 }
 </style>
@@ -645,17 +646,15 @@ card.innerHTML = `
     <div  style="line-height: 1.5em"; class="task-card-header">
         <h3>${task.title}</h3>
         <span style="font-weight: 100;font-size: 13px; border-radius: 10%; background-color: gainsboro;
-        color: white" class="priority">${priorityLabel}</span>
+        color: black" class="priority">${priorityLabel}</span>
     </div>
-    <p style="color: gainsboro;">${task.description}</p>
+    <p style="color: rgba(0, 0, 0, 0.481);">${task.description}</p>
     <div class="card-actions">
         <div class="deadline-and-buttons">
             <p class="task-deadline">${new Date(task.deadline).toLocaleDateString()}</p>
-            
                 <button style="background-color: black;margin-left: 155px; color: grey; padding: 2px 10px;" class="ui button editBtn" onclick="editTask(${task.id})"><i class="fa fa-edit" aria-hidden="true"></i> </button>
                 <button style="background-color: black; color: red; padding: 2px 10px;" class="ui button deleteBtn" onclick="deleteTask(${task.id})">
-                    <i class="fa fa-trash" aria-hidden="true"></i></button>
-             
+                <i class="fa fa-trash" aria-hidden="true"></i></button>
             </div>
         </div>
     </div>
