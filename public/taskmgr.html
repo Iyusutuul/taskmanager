@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    /<script src="https://kit.fontawesome.com/6bb208eccf.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://kit.fontawesome.com/6bb208eccf.js" crossorigin="anonymous"></script> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
     <link rel="stylesheet" href="styles/dashboard.css" type="text/css" media="all">
@@ -46,7 +46,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
     outline: none;
     transition: border 0.3s ease-in-out;
-    box-shadow: 0px 0px 36px 5px rgba(8, 220, 75, 0.824), 0px 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 0px 36px -5px rgba(8, 220, 75, 0.824), 0px 1px 3px rgba(0, 0, 0, 0.08);
 }
 .search-input:hover{
     background-color: #fff;
@@ -55,8 +55,8 @@
 }
 /* Focus effect for the input */
 .search-input:focus {
-    border: 1px solid #4285f4;  /* Gmail's blue color */
-    box-shadow: 0 0 5px rgba(66, 133, 244, 0.6);  /* Blue shadow effect */
+    border: 1px solid rgba(31, 107, 55, 0.824);  /* Gmail's blue color */
+    box-shadow: rgba(31, 107, 55, 0.824);  /* Blue shadow effect */
 }
 
 /* Style for the magnifying glass icon */
@@ -131,7 +131,7 @@ tr:hover{
 }
 .inbox {
         margin-left: 425px;
-        margin-bottom: 30px;
+        margin-bottom: 50px;
         color: #4CAF50;
     }
 
@@ -154,38 +154,34 @@ tr:hover{
 
     #taskCardsContainer {
         display: block; /* Show cards on small screens */
+      
     }
 
     .task-card {
-        width: 85%;
+        width: 70%;
         color: whitesmoke;
-        margin: 0px 23px;
-        padding: 5px;
+        margin: 10px 15px;
+        padding: 10px;
         border-radius: 5px;
         background-color: rgba(0, 0, 0, 0.083);
     }
-
     .task-card-header {
         display: flex;
         color: whitesmoke;
         justify-content: space-between;
         font-size: 1.2em;
-        margin-bottom: -5px;
+        margin-bottom: px;
     }
-
     .task-card-header h4 {
         margin: 0;
         color: whitesmoke;
-   
     }
-
     .priority {
         padding: 5px 10px;
         border-radius: 3px;
         background-color: #f0f0f0;
         font-weight: bold;
     }
-
     .priority.Low {
         background-color: #d4f8d4; /* Light green for Low priority */
     }
@@ -212,18 +208,18 @@ tr:hover{
     font-size: 20px;
     cursor: pointer;
     position: fixed;
-    top: 30px;
-    left: 20px;
-    background-color: #333;
-    color: lawngreen;
+    top: 5px;
+    left: 65%;
+    color: #4CAF50;
     padding: 10px;
     border-radius: 5px;
   }
   .search-container {
     position: fixed;
-    margin-left: 95px;
-    margin-top: 5px;
-    margin-bottom: -10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 25px;
+    margin-bottom: 50px;
 }
 .search-icon{
     font-size: 15px;
@@ -231,8 +227,8 @@ tr:hover{
 /* Search input style */
 .search-input {
     z-index: 1000; /* Ensure it stays above other content */
-    width: 90%;
-    background-color: #000000;
+    width: 320px;
+    border-radius: 5px;
     padding: 7px 15px;     /* Comfortable padding */
     font-size: 16px;        /* Readable font size */
     margin: 10px auto;      /* Centered with some margin */
@@ -241,11 +237,10 @@ tr:hover{
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
     outline: none;
     transition: border 0.3s ease-in-out;
-    box-shadow: 0px 0px 36px 5px rgba(8, 220, 75, 0.824), 0px 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 0px 26px 0px rgba(31, 107, 55, 0.824), 0px 1px 3px rgba(0, 0, 0, 0.08);
 }
-.inbox {    margin-top: 70px;
-            margin-left: 25px; /* Reduce margin on mobile */
-            margin-bottom: 5px;
+.inbox {    margin-top: 10px;
+            margin-left: 20px; /* Reduce margin on mobile */
             font-size: 1.5rem; /* Adjust font size for smaller screens */
         }
         .card-actions{
@@ -259,19 +254,16 @@ tr:hover{
    background-color: red;
    }
    .deadline-and-buttons {
-    display: flex;
-        
-        align-items: flex-start;
-       
-       
-       
+    display: flex; 
+    align-items: flex-start;
+    }
+    p{
+        font-size: 13px;
+        font-weight: bolder;
     }
 }
-
-  
-
 </style>
-<body style="background-color: #000000;">
+<body style="background-color: black;">
     <div id="header">
         <div id="breadcrumb-icon" class="breadcrumb-icon">
             &#x2630; <!-- Hamburger icon, you can replace this with a custom icon -->
@@ -646,9 +638,10 @@ card.classList.add('task-card');
 card.innerHTML = `
     <div class="task-card-header">
         <h3>${task.title}</h3>
-        <span style="font-weight: lighter; background-color: black; color: lawngreen" class="priority">${priorityLabel}</span>
+        <span style="font-weight: bolder;font-size: 15px; border-radius: 50%; background-color: green;
+        line-height: 1.5em; color: whitesmoke" class="priority">${priorityLabel}</span>
     </div>
-    <p>${task.description}</p>
+    <p style="color: gainsboro;">${task.description}</p>
     <div class="card-actions">
         <div class="deadline-and-buttons">
             <p class="task-deadline">${new Date(task.deadline).toLocaleDateString()}</p>
