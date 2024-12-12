@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- <script src="https://kit.fontawesome.com/6bb208eccf.js" crossorigin="anonymous"></script> -->
+    <script src="https://kit.fontawesome.com/6bb208eccf.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
     <link rel="stylesheet" href="styles/dashboard.css" type="text/css" media="all">
@@ -165,6 +165,11 @@ tr:hover{
         border-radius: 5px;
         background-color: rgba(0, 0, 0, 0.083);
     }
+    .task-card:hover {
+    transform: translateY(-1px);      /* Move the card slightly up when hovered */
+    background-color: #4CAF50;
+}
+
     .task-card-header {
         display: flex;
         color: whitesmoke;
@@ -636,10 +641,10 @@ const card = document.createElement('div');
 card.classList.add('task-card');
 
 card.innerHTML = `
-    <div class="task-card-header">
+    <div  style="line-height: 1.5em"; class="task-card-header">
         <h3>${task.title}</h3>
-        <span style="font-weight: bolder;font-size: 15px; border-radius: 50%; background-color: green;
-        line-height: 1.5em; color: whitesmoke" class="priority">${priorityLabel}</span>
+        <span style="font-weight: 100;font-size: 13px; border-radius: 10%; background-color: gainsboro;
+        color: white" class="priority">${priorityLabel}</span>
     </div>
     <p style="color: gainsboro;">${task.description}</p>
     <div class="card-actions">
