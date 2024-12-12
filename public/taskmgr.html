@@ -210,8 +210,9 @@ tr:hover{
         display: none;  /* Sidebar is hidden on mobile devices */
     }
     .breadcrumb-icon {
+        position: fixed;
     display: block;
-    font-size: 20px;
+    font-size: 25px;
     cursor: pointer;
     position: fixed;
     top: 5px;
@@ -643,7 +644,7 @@ const card = document.createElement('div');
 card.classList.add('task-card');
 
 card.innerHTML = `
-    <div  style="line-height: .5em"; class="task-card-header">
+    <div  style="line-height: .2em"; class="task-card-header">
         <h2>${task.title}</h2>
         <span style="color:red" >${priorityLabel}</span>
     </div>
