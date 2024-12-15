@@ -48,14 +48,14 @@ const pool = new Pool({
     .then(() => console.log('Connected to the database'))
     .catch(err => console.error('Database connection error:', err.stack));
 
-// Connect to the PostgreSQL database
-pool.connect((err) => {
-    if (err) {
-        console.error('Database connection error:', err.stack);
-    } else {
-        console.log('Connected to the database');
-    }
-});
+// // Connect to the PostgreSQL database
+// pool.connect((err) => {
+//     if (err) {
+//         console.error('Database connection error:', err.stack);
+//     } else {
+//         console.log('Connected to the database');
+//     }
+// });
 
 // Middleware to parse JSON bodies and static files
 app.use(express.json());

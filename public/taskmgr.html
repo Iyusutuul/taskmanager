@@ -135,6 +135,9 @@ tr:hover{
         margin-bottom: 50px;
         color: #4CAF50;
     }
+    .closebtn{
+        display: none
+    }
 
 /* Table layout for larger screens */
 @media (min-width: 768px) {
@@ -206,13 +209,14 @@ tr:hover{
         width: 250px;
     }
   */
-    #contain {
+    #sidebar {
         display: none;  /* Sidebar is hidden on mobile devices */
     }
+    
     .breadcrumb-icon {
     position: fixed;
     display: block;
-    font-size: 15px;
+    font-size: 25px;
     cursor: pointer;
     position: fixed;
     top: 10px;
@@ -283,37 +287,96 @@ tr:hover{
     color: rgb(20, 209, 102);
     margin-bottom: -40px;
 }
+.closebtn{
+    display: block;
+    font-size: 36px;
+            color: #818181;
+            position: fixed; /* Fixed to the page */
+            top: 15px;      /* Position it at the top */
+            right: 5px;    /* Position it at the right */
+            z-index: 1000;  /* Ensure it's on top of other elements */
+            cursor: pointer;
+            transition: color 0.3s ease;
+    }
+    .closebtn i {
+    font-size: 35px; /* Size of the X icon */
+    color: lawngreen;  /* Default color of the X icon */
+    transition: color 0.3s ease; /* Smooth transition for hover color */
+    }
+    .sidebar{
+  position: fixed;
+  height: 100%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 250px;
+  box-sizing: border-box;
+  background-color: whitesmoke;
+  box-shadow: 1px 1px 2px rgba(185, 222, 221, 0.4);
+  z-index: 1000;
+  }
+  .modal-content {
+        display: flex;
+        justify-content: center;
+        background-color: #fff;
+        margin: 20% 10%;
+        padding: 10px;
+        border-radius: 5px;
+        width: 400px;
+        height: 300px;
+        box-shadow: 0 40px 40px rgba(107, 212, 21, 0.2);
+        z-index: 200;
+        /* Slightly stronger shadow on hover */
+    }
+    .loginform input{
+    border: 1px solid gainsboro;
+    width: 80%;
+    height: 30px;
+    margin: 10px -35px;
+    border-radius:3px;
+    padding: 3px 15px;
+    font-size: 16px;
+    font-weight: 500;
+    color: black;
+    text-align: left;
+    background-color: white;
+   }
+   .close-btn{
+    margin-top: 20px;
+   }
 }
 </style>
 <body style="background-color: rgba(0, 0, 0, 0.761)">
     <div id="header">
-        <div id="breadcrumb-icon" class="breadcrumb-icon">
+         <div id="breadcrumb-icon" class="breadcrumb-icon" onclick="openSidebar()" >
             &#x2630; <!-- Hamburger icon, you can replace this with a custom icon -->
           </div>
-        <div style="background-color: black;" id="contain">
-            <nav>
-                <ul>
-                    <span style="display: flex; width: 70%; font-weight: bolder;
-                        padding: 5px; letter-spacing: 10px;color: rgba(245, 245, 245, 0.645); 
-                        margin: 15px 35px;;font-size:20px;
-                    ">TaskMaster</span>
-                    <li id="openModalBtn"><a style="font-weight:300" href=" ">
-                            <i style="background-color: rgba(8, 220, 75, 0.824);padding: 3px;color: white;
-                        border-radius: 50px;" class="fa-solid fa-plus"></i>&#160&#160&#160Add Task</a></li>
-                    <li id="openSearchModalBtn"><a href="#"><i
-                                class="fa-solid fa-magnifying-glass"></i>&#160&#160&#160&#160Search</a></li>
-                    <li style="background-color: rgba(8, 220, 75, 0.273);"><a href="#"><i
-                                class="fa-solid fa-inbox"></i>&#160&#160&#160&#160Inbox</a></li>
-                    <li><a href="#"><i class="fa-solid fa-clock"></i>&#160&#160&#160&#160View Pending</a></li>
-                    <li><a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>&#160&#160&#160&#160Logout</a>
-                    </li>
+    <!--- side bar -->
+    <div style="background-color: black;" id="sidebar" class="sidebar">
+        <nav>
+            <ul>
+                <span class="logo" style="display: flex; width: 70%; font-weight: bolder;
+                padding: 5px; letter-spacing: 10px;color: rgba(245, 245, 245, 0.645); 
+                margin: 15px 35px;;font-size:20px;
+                ">TaskMaster</span>
+                <li><a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()"><i class="fa fa-window-close" aria-hidden="true"></i></a></li>
+                <li id="openModalBtn"><a style="font-weight:300" href="javascript:void(0)" onclick="closeSidebar()">
+                <i style="background-color: rgba(8, 220, 75, 0.824);padding: 3px;color: white;
+                border-radius: 50px;" class="fa-solid fa-plus"></i>&#160&#160&#160Add Task</a></li>
+                <li id="openSearchModalBtn"><a href="#"><i
+                class="fa-solid fa-magnifying-glass"></i>&#160&#160&#160&#160Search</a></li>
+                <li style="background-color: rgba(8, 220, 75, 0.273);"><a href="#"><i
+                class="fa-solid fa-inbox"></i>&#160&#160&#160&#160Inbox</a></li>
+                <li><a href="#"><i class="fa-solid fa-clock"></i>&#160&#160&#160&#160View Pending</a></li>
+                <li><a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>&#160&#160&#160&#160Logout</a>
+                </li>
                 </ul>
             </nav>
         </div>
     </div>
-    <!-- <div class="search-container">
-        <input type="text" id="search-input" class="search-input" placeholder="Search Tasks">
-        <span class="search-icon">&#128269;</span>  Magnifying glass icon -->
+<!-- <div class="search-container">
+    <input type="text" id="search-input" class="search-input" placeholder="Search Tasks">
+    <span class="search-icon">&#128269;</span>  Magnifying glass icon -->
     </div> 
     <h2 class="inbox">Inbox</h2>
     <table style="margin-top: -20px; flex-grow: 1; padding: 1px;border: none;background-color: #000000;" id="tasksTable" class="ui celled table">
@@ -703,19 +766,16 @@ card.innerHTML = `
     taskTableBody.appendChild(row);
 });
 
-// Get references to breadcrumb icon and sidebar
-const breadcrumbIcon = document.getElementById('breadcrumb-icon');
-const sidebar = document.getElementById('contain');
+// Open the sidebar
+function openSidebar() {
+    document.getElementById("sidebar").style.display = "block"; // Adjust the width as per your design
+    document.querySelector('.tasks').classList.add('sidebar-open');  // Add a class to adjust tasks content
+}
 
-// Add event listener to toggle the sidebar visibility
-breadcrumbIcon.addEventListener('click', function() {
-    // Toggle sidebar visibility
-    if (sidebar.style.left === '250px') {
-        sidebar.style.left = '-250px';  // Hide sidebar (move off-screen)
-    } else {
-        sidebar.style.left = '0';  // Show sidebar (slide in from left)
-    }
-});
+// Close the sidebar
+function closeSidebar() {
+    document.getElementById("sidebar").style.display= "none";
+}
 
 
         </script>
