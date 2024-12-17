@@ -191,17 +191,6 @@ tr:hover{
         background-color: #f0f0f0;
         font-weight: bold;
     }
-    .priority.Low {
-        background-color: #d4f8d4; /* Light green for Low priority */
-    }
-
-    .priority.Medium {
-        background-color: #fffac8; /* Light yellow for Medium priority */
-    }
-
-    .priority.High {
-        background-color: #f8d4d4; /* Light red for High priority */
-    }
     .ui .deleteBtn{
      color: rgba(255, 0, 0, 0.695);
    }
@@ -293,7 +282,7 @@ tr:hover{
             color: #818181;
             position: fixed; /* Fixed to the page */
             top: 15px;      /* Position it at the top */
-            right: 5px;    /* Position it at the right */
+            right: 10px;    /* Position it at the right */
             z-index: 1000;  /* Ensure it's on top of other elements */
             cursor: pointer;
             transition: color 0.3s ease;
@@ -316,13 +305,14 @@ tr:hover{
   z-index: 1000;
   }
   .modal-content {
+    position: relative;
         display: flex;
         justify-content: center;
-        background-color: #fff;
+        background-color: black;
         margin: 20% 10%;
         padding: 10px;
         border-radius: 5px;
-        width: 400px;
+        width: 250px;
         height: 300px;
         box-shadow: 0 40px 40px rgba(107, 212, 21, 0.2);
         z-index: 200;
@@ -330,9 +320,10 @@ tr:hover{
     }
     .loginform input{
     border: 1px solid gainsboro;
-    width: 80%;
+    width: 70%;
     height: 30px;
-    margin: 10px -35px;
+    margin: 10px 0px;
+    margin-left: -90px;
     border-radius:3px;
     padding: 3px 15px;
     font-size: 16px;
@@ -344,6 +335,36 @@ tr:hover{
    .close-btn{
     margin-top: 20px;
    }
+   .ui.container {
+  position: relative; /* Allows absolute positioning of dropdown */
+  padding-left: 0 !important; /* Optional: Remove any left padding if needed */
+  padding-right: 0 !important; /* Optional: Remove any right padding if needed */
+}
+form button {
+    display: flex;               /* Use flexbox to center content */
+    justify-content: center;     /* Horizontally center the text */
+    align-items: center;         /* Vertically center the text */
+    text-align: center;   
+    margin-left: -100px;
+    margin-top: -30px;
+   width: 70px;
+    padding: 5px 7px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    }
+.ui.dropdown.menu {
+  position: absolute;
+  left: 0 !important; /* Force the dropdown to move left */
+  right: unset; /* Remove any right constraints */
+}
+.ui.dropdown.menu {
+  width: auto;  /* Ensure dropdown width is not constrained */
+  min-width: 0; /* Optionally, remove any minimum width */
+}
+
 }
 </style>
 <body style="background-color: rgba(0, 0, 0, 0.761)">
@@ -425,10 +446,10 @@ tr:hover{
             <input type="date" id="deadline" name="deadline" required>
                 </label>
                     </div>
-                        <div class="ui container">
+                        <div  class="ui container">
                     <label for="priority"></label>
-                <div style="margin: 0px 6%;" class="ui selection dropdown" id="priority-dropdown">
-            <input type="hidden" id="priority" name="priority">
+                <div style="margin: 0px 0%;" class="ui selection dropdown" id="priority-dropdown">
+            <input class="dropdown" type="hidden" id="priority" name="priority">
         <i class="dropdown icon"></i>
     <div class="default text">Select Priority</div>
 <div class="menu">
