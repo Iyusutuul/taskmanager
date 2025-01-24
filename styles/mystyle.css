@@ -1,0 +1,381 @@
+*{
+  margin: 0;
+  padding: 0;
+  font-family:"Myriad Pro";
+  box-sizing: border-box;
+}
+
+.slidein {
+  animation-duration: 10s;
+  animation-name: slidein;
+  animation-iteration-count: 3;
+  animation-direction: alternate;
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 300%;
+  }
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
+}
+
+body{
+  margin:0;
+ 
+}
+.rect_1{
+  width: 80%;
+  height: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 10;
+  
+}
+/************sets image width on mixed color navbar****/
+.rect_1 img{
+  width: 100%;
+}
+.rect_2{
+  width: 100%;
+  border: 0;
+    position:absolute;
+    top: 5px;
+    left: 50;
+    right: 0;
+}
+.rect_3{
+  position: absolute;
+  height: 5px;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 20%;
+  margin-left: 80%;
+  
+}
+/***targets both the logo and the links on the left***/
+#header{
+  margin: 10px;
+  margin-left: 30px;
+  margin-right: 30px;
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+}
+header *{
+  display: inline-block;
+  line-height: 100px;
+
+}
+/**targets just the links***/
+.contain{
+ margin: 10px 20px;
+}
+
+/***targets the logo text position***/
+.formheading{
+  background-color: orangered;
+  background-image: linear-gradient(45deg, #fefefe,#e63819);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  padding-left: 10px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+   'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+    'Helvetica Neue', sans-serif;
+  font-size: 25px;
+  font-weight: bold;
+  position: relative;
+  display: flex;
+  margin-left: 15px;
+  
+}
+.formheading i{
+  color: orangered;
+  font-size: 20px;
+}
+/*targets the descriptive links container behaviour*/
+ nav ul li{
+  display: inline-block;
+  list-style: none;
+  margin: -10px 15px;
+  text-align: center;
+  
+ }
+/**targets the link texts itself**/
+ nav ul li a{
+  text-decoration: none;
+  position: relative;
+  color: rgba(10, 4, 4, 0.768);
+  font-size: 15px;
+  font-weight:500;
+ }
+ nav ul li a:after{
+  color: orange;
+  content: '';
+  width: 100;
+  top: 20px;
+  height: 5px;
+  position: absolute;
+  left: 0;
+  /* bottom: -20px; */
+  box-shadow: 1px 1px 2px rgb(0 0 200 / 0.4);
+  border-radius: 2px;
+  transition: 0.5s;
+ }
+
+ nav ul li a:hover::after{
+  width: 100%;
+  top: 30px;
+  background-color: orangered; 
+ }
+
+/* Style the navigation bar */
+.button { 
+  text-decoration: none;
+  left: 1300px;
+  top: 15px;
+  right: 0px;
+  display: flex;
+  position: absolute;
+  text-align: center;
+  }
+
+.elderly{
+  font-family: inherit;
+margin:0;
+padding: o;
+}
+.elderly img{
+  position: relative;
+}
+/****Our Mission***/
+.myDiv {
+  text-align: center;
+  height: 400px;
+  margin-top: -4px;
+  padding-top: 20px;
+  
+  background-image: linear-gradient(to right, #ff0844 50%, #ffb199 100%);
+  letter-spacing: 1px;
+  font-family: inherit;
+}
+
+.vertical_text_1 {
+  line-height: 3.rem;
+  letter-spacing: 5px;
+  position: absolute;
+  font-family: inherit;
+  font-size: 70px;
+  top: 100px;
+  left: 80px;
+  color: #ffffffce;
+  padding: 8px;  
+}
+.vertical_text_2{
+  position: absolute;
+  line-height: 1.0rem;
+  font-weight:100;
+  font-size: 17px;
+  top: 250px;
+  left: 100px;
+  color: whitesmoke;
+  font-family: 'myriad-pro';
+  opacity: .9;
+}
+.image-container {
+  position: relative;
+  width: 100%;
+ 
+}
+
+.image-container img {
+  width: 100%;
+  height: 650px;
+}
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(255, 0, 0, 0.5), rgba(0, 0, 255, 0.062));
+  mix-blend-mode: overlay; /* You can change this value for different effects */
+  pointer-events: none;
+}
+.get_started{
+  position: absolute;
+  top: 525px;
+  left: 170px;
+  border-radius: 5px;
+  background-color: rgb(138, 212, 233);
+  opacity: 0.8;
+  padding: 10px 17px;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  border: none;
+}
+.sub-title{
+  text-align: center;
+  font-weight:400;
+  margin: 30px 0;
+  padding-bottom: 30px;
+  font-size: 30px; 
+  color: white;
+}
+.myDiv p{
+  text-align: center;
+  font-size: 20px;
+  font-weight: 100;
+  color: white;
+}
+.projection {
+  background-color: white;
+  color: whitesmoke;
+}
+.projection h1 {
+  color: #fa8128;
+  padding: 10px 0;
+  text-align: center;
+  font: 400 1.125rem / 1.5rem;
+  font-weight: 600;
+  font-size: 30px; 
+}
+.projection {
+  display: flex;               /* Enable flexbox */
+  justify-content: space-between; /* Distribute circles evenly horizontally */
+  align-items: center;         /* Vertically align circles */
+  width: 100%;                 /* Ensure the container takes up full width */
+  margin: 0 auto;              /* Center the container horizontally */
+}
+.circle {
+  width: 200px;
+  height: 200px;
+  line-height: 200px;
+  vertical-align: middle; 
+  display: inline-block;
+  border-radius: 50%;
+  font-size: 65px;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+  background: orange;
+  margin: 10px 0px 20px 0;
+  margin-inline-start: 70px;
+  justify-content: space-between;
+  margin-inline-end: 30px;
+}
+.circle-text p{
+  font-size: 14px;
+  color: black
+}
+.circle span {
+  font-size: 50px;
+}
+.text-content {
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  transform: translate(-50px,-50px);
+  color: burlywood; 
+  font-size: 1.5rem;
+}
+.impact-list{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 30px;
+}
+.impact-list div{
+  background-color: ash;
+  padding: 0px 0px 0 25px;
+  font-size: 16px;
+  font-weight: 300;
+  font-family: Lucida Sans Unicode;
+}
+.impact-list div i{
+  font-size: 20px;
+  margin-bottom: 20px;
+  transition: background 0.5s, transform 0.5s;
+}
+.impact-list div h2{
+font-size: 20px;
+font-weight: bold;
+margin-bottom: 10px;
+text-align: center;
+}
+.impact-list div a{
+  text-decoration: none;
+  color: #fff;
+  font-size: 12px;
+  margin-top: 10px;
+  display: inline-block;
+}
+  
+/*********Our Services********/
+.services-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 15px;
+}
+.services {
+  height: 450px;
+  WIDTH: 300PX;
+  position: relative;
+  overflow: hidden;
+  justify-content: center;
+  cursor: pointer;
+ 
+}
+.services img {
+  width: 250px;
+  height: 300px;
+  opacity: 0.9;
+  position: relative;
+  box-shadow:
+  inset 2px 2px 3px rgba(255, 255, 255, 0.6),
+  inset -2px -2px 3px rgba(0, 0, 2220, 0.6);
+}
+
+.across_text {
+  width:250px;
+  bottom: 0;
+  background: rgba(150, 6, 28, 0.6);
+  position: absolute;
+  text-align: center;
+  color: white;
+  padding: 30px 0;
+}
+/***container for services***/
+.container {
+background: #000000;  /* fallback for old browsers */
+
+padding: 10px 50px;
+height: 800px;
+}
+
+
+/* Current/active navbar link */
+.active {
+  background-color: yellow;
+}
+
+/* Add responsiveness - will automatically display the navbar vertically instead of horizontally on screens less than 500 pixels */
+@media screen and (min-width: 57px) {
+  .navbar a {
+    float: none;
+    display: block;
+  }
+}
